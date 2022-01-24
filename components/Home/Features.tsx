@@ -4,50 +4,42 @@ const Features = () => {
       <div className='features-area pt-100 pb-70'>
         <div className='container'>
           <div className='section-title'>
-            <h2>The Global Leader of Social Trading</h2>
+            <h2>The Global Leader of Social Workshop</h2>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco.
+              This is workshop for scheduling various works by staking.
             </p>
           </div>
           <div className='row align-items-center justify-content-center'>
             <div className='col-lg-4 col-md-6 col-sm-6'>
               <div className='features-box'>
                 <div className='icon'>
-                  <img src='/images/icon/icon18.png' alt='image' />
+                  <img src='/images/icon/icon3.png' alt='image' />
                 </div>
-                <h3>Start Instantly</h3>
+                <h3>Easy to Create</h3>
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur adipicing elit, sed do
-                  eiusmod tempor incididunt ut labore et doee magna aliqua. Ut
-                  enim ad minim veniam.
+                  The client who wants to creat job can stake his token for creating.
                 </p>
               </div>
             </div>
             <div className='col-lg-4 col-md-6 col-sm-6'>
               <div className='features-box'>
                 <div className='icon bg-ffefc7'>
-                  <img src='/images/icon/icon19.png' alt='image' />
+                  <img src='/images/icon/icon11.png' alt='image' />
                 </div>
-                <h3>Easy to Use</h3>
+                <h3>Easy to Stake</h3>
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur adipicing elit, sed do
-                  eiusmod tempor incididunt ut labore et doee magna aliqua. Ut
-                  enim ad minim veniam.
+                  Users can stake his favorite works very easily.
                 </p>
               </div>
             </div>
             <div className='col-lg-4 col-md-6 col-sm-6'>
               <div className='features-box'>
                 <div className='icon bg-ffc9c2'>
-                  <img src='/images/icon/icon20.png' alt='image' />
+                  <img src='/images/icon/icon8.png' alt='image' />
                 </div>
                 <h3>Secure and Regulated</h3>
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur adipicing elit, sed do
-                  eiusmod tempor incididunt ut labore et doee magna aliqua. Ut
-                  enim ad minim veniam.
+                  Creating work and staking is truely secure.
                 </p>
               </div>
             </div>

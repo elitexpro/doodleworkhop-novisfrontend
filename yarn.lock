@@ -2403,6 +2403,13 @@ react-is@^17.0.2:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
+react-notification@^6.8.5:
+  version "6.8.5"
+  resolved "https://registry.yarnpkg.com/react-notification/-/react-notification-6.8.5.tgz#7ea90a633bb2a280d899e30c93cf372265cce4f0"
+  integrity sha512-3pJPhSsWNYizpyeMeWuC+jVthqE9WKqQ6rHq2naiiP4fLGN4irwL2Xp2Q8Qn7agW/e4BIDxarab6fJOUp1cKUw==
+  dependencies:
+    prop-types "^15.6.2"
+
 react-owl-carousel3@^2.2.5:
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/react-owl-carousel3/-/react-owl-carousel3-2.2.5.tgz#0083128cdb44758fdfb1a8b6054e2df2a66a3c9e"

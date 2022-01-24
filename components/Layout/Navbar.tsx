@@ -1,5 +1,7 @@
 import React,{useState, useEffect} from 'react';
 import Link from '../../utils/ActiveLink';
+import { useSigningClient } from '../../cosmwasm/contexts/cosmwasm'
+import Loader from './Loader'
 
 const Navbar = () => {
 
@@ -8,6 +10,15 @@ const Navbar = () => {
   const toggleMenu = () => {
     setshowMenu(!showMenu);
   };
+
+  const { walletAddress, connectWallet, disconnect, loading } = useSigningClient()
+  const handleConnect = () => {
+    if (walletAddress.length === 0) {
+      connectWallet()
+    } else {
+      disconnect()
+    }
+  }
 
   useEffect(() => {
     let elementId = document.getElementById('navbar');
@@ -20,6 +31,8 @@ const Navbar = () => {
     });
     window.scrollTo(0, 0);
   }, []);
+
+
 
 
   return (
@@ -62,12 +75,12 @@ const Navbar = () => {
           <div className='container'>
             <Link className="flex" href='/'>
               <div className="d-flex flex-row align-items-center" >
-                <a className="justify-content-center flex-2" style= {{ width:"50px"}}>
+                <a className="justify-content-center" style= {{ width:"40px"}}>
                   <img src='/images/juno.png' alt='logo' className="justify-right"/>
                 </a>
-                <h1 className="flex-4 ml-50" style={{ width:"450px" }}>
+                <h3 className="text-3xl font-bold justify-center mt-2 ms-2">
                   DOODLE WORKSHOP
-                </h1>
+                </h3>
               </div>
             </Link>
             <div className='collapse navbar-collapse mean-menu'>
@@ -156,18 +169,22 @@ const Navbar = () => {
               <div className='others-option'>
                 <div className='d-flex align-items-center'>
                   <div className='option-item'>
-                    <Link href='/authentication' activeClassName='active'>
+                    <Link href='https://keplr.app/' activeClassName='active'>
                       <a className='login-btn'>
-                        <i className='bx bx-log-in'></i> Login
+                        <i className='bx bxs-error'></i> no Keplr?
                       </a>
                     </Link>
                   </div>
-                  <div className='option-item'>
-                  <Link href='/contact' activeClassName='active'>
-                      <a className='default-btn'>
-                      <i className='bx bxs-contact' ></i> Contact Us
-                      </a>
-                    </Link>
+
+                  <i className= { loading ? 'bx bx-loader bx-spin bx-md' : '' }></i> 
+                  <div className="flex flex-grow lg:flex-grow-0 max-w-full ms-2">
+                    <button
+                      className="block default-btn w-full max-w-full truncate"
+                      onClick={handleConnect}
+                    >
+                      <i className= 'bx bxs-contact'></i> 
+                      {walletAddress || 'Connect Wallet'}
+                    </button>
                   </div>
                 </div>
               </div>

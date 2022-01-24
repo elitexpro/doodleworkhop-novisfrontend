@@ -14,19 +14,19 @@ const Index = () => {
   return (
     <>
       <Banner />
-      <Features />
+      <OurFeature title="The Global Leader of Social Workshop"/>
+      {/* <Features /> */}
      
-      <Countdown date={Date.now() + 80000000000} renderer={TokensArea} />
       <CryptocurrencyArea />
-      <OurFeature />
-      <Portfolio bgColor='bg-fff0ee' shape={true} />
+      
+      {/* <Portfolio bgColor='bg-fff0ee' shape={true} />
       <BuySell />
-      <AppDownload />
-      <AdvisorArea />
+      <AppDownload /> */}
+      {/* <AdvisorArea /> */}
       <RegisterArea
         bgGradient='bg-gradient-image'
         blackText='black-text'
-        ctaImage='/images/man-with-ipad.png'
+        ctaImage='/images/wallet.png'
       />
     </>
   );

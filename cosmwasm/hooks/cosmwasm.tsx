@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { connectKeplr } from 'services/keplr'
+import { connectKeplr } from '../services/keplr'
 import { SigningCosmWasmClient, CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 
 export interface ISigningCosmWasmClientContext {

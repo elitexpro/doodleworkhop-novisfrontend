@@ -15,18 +15,21 @@ import '../public/css/responsive.css';
 
 import Layout from '../components/Layout/Layout';
 import GoTop from '../components/Shared/GoTop';
+import { SigningCosmWasmProvider } from '../cosmwasm/contexts/cosmwasm'
 
 export default function App({ Component, pageProps }) {
   const store = useStore(pageProps.initialReduxState);
 
   return (
-    <Provider store={store}>
-      <Layout>
-        <Component {...pageProps} />
+    <SigningCosmWasmProvider>
+      <Provider store={store}>
+        <Layout>
+          <Component {...pageProps} />
 
-        {/* Go Top Button */}
-        <GoTop/>
-      </Layout>
-    </Provider>
+          {/* Go Top Button */}
+          <GoTop/>
+        </Layout>
+      </Provider>
+    </SigningCosmWasmProvider>
   );
 }
