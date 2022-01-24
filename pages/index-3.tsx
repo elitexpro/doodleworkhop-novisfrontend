@@ -1,33 +1,28 @@
-import Banner from '../components/HomeThree/Banner';
-import Features from '../components/HomeThree/Features';
-import TokensArea from '../components/HomeThree/TokensArea';
-import CryptocurrencyArea from '../components/HomeThree/CryptocurrencyArea';
-import OurFeature from '../components/Common/OurFeature';
+import Banner from '../components/HomeOne/Banner';
+import Funfact from '../components/Common/Funfact';
+import BuySell from '../components/HomeOne/BuySell';
+import AccountCreate from '../components/Common/AccountCreate';
+import Platform from '../components/HomeOne/Platform';
+import FeedBack from '../components/HomeOne/FeedBack';
 import Portfolio from '../components/Common/Portfolio';
-import BuySell from '../components/Common/BuySell';
+import OurFeature from '../components/Common/OurFeature';
 import AppDownload from '../components/Common/AppDownload';
-import AdvisorArea from '../components/Common/AdvisorArea';
-import RegisterArea from '../components/Common/RegisterArea';
-import Countdown from 'react-countdown';
+import RegisterAreaTwo from '../components/Common/RegisterAreaTwo';
 
 const Index = () => {
+  
   return (
     <>
       <Banner />
-      <Features />
-     
-      <Countdown date={Date.now() + 80000000000} renderer={TokensArea} />
-      <CryptocurrencyArea />
-      <OurFeature />
-      <Portfolio bgColor='bg-fff0ee' shape={true} />
-      <BuySell />
+      <Funfact pt100='pt-100' />
+      <BuySell pt70='pt-70' />
+      <AccountCreate title='Get Started in a Few Minutes' />
+      <Platform />
+      <FeedBack />
+      <Portfolio bgColor='bg-f9f9f9' />
+      <OurFeature title='Our Features' />
       <AppDownload />
-      <AdvisorArea />
-      <RegisterArea
-        bgGradient='bg-gradient-image'
-        blackText='black-text'
-        ctaImage='/images/man-with-ipad.png'
-      />
+      <RegisterAreaTwo title='Start Trading on Novis' />
     </>
   );
 };
