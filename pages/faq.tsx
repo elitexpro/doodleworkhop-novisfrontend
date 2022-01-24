@@ -27,22 +27,7 @@ const Faq = ({ data }) => {
         <div className='container'>
           <div className='faq-accordion'>
             <ul className='nav nav-tabs' id='myTab' role='tablist'>
-              <li className='nav-item' role='presentation'>
-                <button
-                  className={toggleState === 1 ? 'nav-link active' : 'nav-link'}
-                  onClick={() => toggleTab(1)}
-                  id='novis-direct-tab'
-                  data-bs-toggle='tab'
-                  data-bs-target='#novis-direct'
-                  type='button'
-                  role='tab'
-                  aria-controls='novis-direct'
-                  aria-selected='true'
-                >
-                  <i className='bx bx-flag'></i>
-                  Novis Direct
-                </button>
-              </li>
+              
               <li className='nav-item' role='presentation'>
                 <button
                   className={toggleState === 2 ? 'nav-link active' : 'nav-link'}

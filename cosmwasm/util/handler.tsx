@@ -1,26 +1,33 @@
 import type { NextPage } from 'next'
-import { useSigningClient } from '../../cosmwasm/cosmwasmcontext'
+import { useSigningClient } from '../contexts/cosmwasm'
 import { useEffect, useState, MouseEvent, ChangeEvent } from 'react'
 import {
   convertMicroDenomToDenom, 
   convertDenomToMicroDenom,
   convertFromMicroDenom
-} from '../../cosmwasm/conversion'
-import {NotificationContainer, NotificationManager} from 'react-notifications';
-
-import TextField from '@mui/material/TextField'
-import AdapterDateFns from '@mui/lab/AdapterDateFns'
-import LocalizationProvider from '@mui/lab/LocalizationProvider'
-import DateTimePicker from '@mui/lab/DateTimePicker'
-import { fromBase64, toBase64 } from '@cosmjs/encoding'
-
-import { encode } from 'punycode'
+} from './conversion'
 
 const PUBLIC_STAKING_DENOM = process.env.NEXT_PUBLIC_STAKING_DENOM || 'ujuno'
 const PUBLIC_TOKEN_ESCROW_CONTRACT = process.env.NEXT_PUBLIC_TOKEN_ESCROW_CONTRACT || ''
 const PUBLIC_CW20_CONTRACT = process.env.NEXT_PUBLIC_CW20_CONTRACT || ''
+const { walletAddress, signingClient, connectWallet } = useSigningClient()
 
-const Wallet = () => {
+export function GetBalance(): number {
+  if (!signingClient || walletAddress.length === 0) return
+
+  // Gets native balance (i.e. Juno balance)
+  signingClient.getBalance(walletAddress, PUBLIC_STAKING_DENOM).then((response: any) => {
+    const { amount, denom }: { amount: number; denom: string } = response
+    return convertMicroDenomToDenom(amount)
+    // setBalance(`${convertMicroDenomToDenom(amount)} ${convertFromMicroDenom(denom)}`)
+    // setWalletAmount(convertMicroDenomToDenom(amount))
+  }).catch((error) => {
+    console.log('Error signingClient.getBalance(): ', error)
+    return 0
+  })
+}
+
+const Home: NextPage = () => {
   const { walletAddress, signingClient, connectWallet } = useSigningClient()
   const [balance, setBalance] = useState('')
   const [cw20Balance, setCw20Balance] = useState('')
@@ -126,7 +133,7 @@ const Wallet = () => {
   const handleStake = (event: MouseEvent<HTMLElement>) => {
     if (!signingClient || walletAddress.length === 0) return
     if (!stakeAmount) {
-      setStakeAmount("0")
+      stakeAmount = "0"
       // alert.error('Please enter the amount you would like to stake')
       // return
     }
@@ -320,4 +327,4 @@ const Wallet = () => {
   )
 }
 
-export default Wallet
+export default Home
