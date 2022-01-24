@@ -6,7 +6,6 @@ import TopHeader from './TopHeader';
 
 //navbar
 import Navbar from './Navbar';
-import NavbarTwo from './NavbarTwo';
 
 //footer
 import Footer from './Footer';
@@ -39,8 +38,8 @@ const Layout = ({ children }) => {
         <link rel='canonical' href='https://novis-react.envytheme.com'></link>
       </Head>
 
-      {pathname === '/' ? <TopHeader /> : ''}
-      {pathname === '/index-2' ? <NavbarTwo /> : <Navbar />}
+      {/* {pathname === '/' ? <TopHeader /> : ''} */}
+      <Navbar />
   
       {children}
 

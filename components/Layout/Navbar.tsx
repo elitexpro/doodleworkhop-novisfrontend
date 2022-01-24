@@ -38,7 +38,7 @@ const Navbar = () => {
               <div className='logo'>
                 <Link href='/'>
                   <a>
-                    <img src='/images/logo.png' alt='logo' />
+                    <img src='/images/juno.png' alt='logo' />
                   </a>
                 </Link>
               </div>
@@ -53,17 +53,6 @@ const Navbar = () => {
                       </a>
                     </Link>
                   </div>
-                 
-                  <div className='option-item'>
-                    <select className='form-select'>
-                      <option value='0'>English</option>
-                      <option value='1'>Türkçe</option>
-                      <option value='2'>Español</option>
-                      <option value='3'>한국어</option>
-                      <option value='4'>Italiano</option>
-                      <option value='5'>Polski</option>
-                    </select>
-                  </div>
                 </div>
               </div>
             </div>
@@ -71,193 +60,58 @@ const Navbar = () => {
         </div>
         <nav className={showMenu? 'show navbar navbar-expand-md navbar-light':'navbar navbar-expand-md navbar-light hide-menu'}>
           <div className='container'>
-            <Link href='/'>
-              <a className='navbar-brand'>
-                <img src='/images/logo.png' alt='logo' />
-              </a>
+            <Link className="flex" href='/'>
+              <div className="d-flex flex-row align-items-center" >
+                <a className="justify-content-center flex-2" style= {{ width:"50px"}}>
+                  <img src='/images/juno.png' alt='logo' className="justify-right"/>
+                </a>
+                <h1 className="flex-4 ml-50" style={{ width:"450px" }}>
+                  DOODLE WORKSHOP
+                </h1>
+              </div>
             </Link>
             <div className='collapse navbar-collapse mean-menu'>
               <ul className='navbar-nav'>
                 <li className='nav-item'>
-                  <Link href='/' activeClassName='active'>
-                    <a className='dropdown-toggle nav-link'>Home</a>
-                  </Link>
-                  <ul className='dropdown-menu'>
-                    <li className='nav-item'>
-                      <Link
-                        href='/'
-                        className='nav-link'
-                        activeClassName='active'
-                      >
-                        <a className='nav-link'>Home Demo - 1</a>
-                      </Link>
-                    </li>
-                    <li className='nav-item'>
-                      <Link href='/index-2' activeClassName='active'>
-                        <a className='nav-link'>Home Demo - 2</a>
-                      </Link>
-                    </li>
-                    <li className='nav-item'>
-                      <Link href='/index-3' activeClassName='active'>
-                        <a className='nav-link'>Home Demo - 3</a>
-                      </Link>
-                    </li>
-                    <li className='nav-item'>
-                      <Link href='#' activeClassName='active'>
-                        <a className='dropdown-toggle nav-link'>Pages</a>
-                      </Link>
-                      <ul className='dropdown-menu'>
-                        <li className='nav-item'>
-                          <Link href='/trade' activeClassName='active'>
-                            <a className='nav-link'>Trade</a>
-                          </Link>
-                        </li>
-                        <li className='nav-item'>
-                          <Link href='/leadership' activeClassName='active'>
-                            <a className='nav-link'>Leadership Team</a>
-                          </Link>
-                        </li>
-                        <li className='nav-item'>
-                          <Link href='/privacy-policy' activeClassName='active'>
-                            <a className='nav-link'>Privacy Policy</a>
-                          </Link>
-                        </li>
-                        <li className='nav-item'>
-                          <Link
-                            href='/terms-condition'
-                            activeClassName='active'
-                          >
-                            <a className='nav-link'>Terms & Conditions</a>
-                          </Link>
-                        </li>
-                      </ul>
-                    </li>
-                  </ul>
-                </li>
-                <li className='nav-item megamenu'>
                   <Link href='#' activeClassName='active'>
-                    <a className='dropdown-toggle nav-link'>Buy</a>
+                    <a className='dropdown-toggle nav-link'>Admin</a>
                   </Link>
                   <ul className='dropdown-menu'>
                     <li className='nav-item'>
-                      <Link href='/buy'>
-                        <a className='nav-link'>
-                          <img
-                            src='/images/cryptocurrency/cryptocurrency2.png'
-                            alt='image'
-                          />
-                          BTC - Bitcoin
-                        </a>
-                      </Link>
-                    </li>
-                    <li className='nav-item'>
-                      <Link href='/buy'>
-                        <a className='nav-link'>
-                          <img
-                            src='/images/cryptocurrency/cryptocurrency3.png'
-                            alt='image'
-                          />
-                          MIT - Litecoin
-                        </a>
-                      </Link>
-                    </li>
-                    <li className='nav-item'>
-                      <Link href='/buy'>
-                        <a className='nav-link'>
-                          <img
-                            src='/images/cryptocurrency/cryptocurrency4.png'
-                            alt='image'
-                          />
-                          XRP - Ripple
-                        </a>
-                      </Link>
-                    </li>
-                    <li className='nav-item'>
-                      <Link href='/buy'>
-                        <a className='nav-link'>
-                          <img
-                            src='/images/cryptocurrency/cryptocurrency5.png'
-                            alt='image'
-                          />
-                          STE - Stellar
-                        </a>
-                      </Link>
-                    </li>
-                    <li className='nav-item'>
-                      <Link href='/cryptocurrency' activeClassName='active'>
-                        <a className='nav-link'>
-                          <i className='bx bxs-chevron-right-circle'></i>
-                          View All Coins
-                        </a>
+                      <Link href='/admin' activeClassName='active'>
+                        <a className='nav-link'>Work List</a>
                       </Link>
                     </li>
                   </ul>
                 </li>
                 <li className='nav-item megamenu'>
                   <Link href='#' activeClassName='active'>
-                    <a className='dropdown-toggle nav-link'>Sell</a>
+                    <a className='dropdown-toggle nav-link'>Works</a>
                   </Link>
                   <ul className='dropdown-menu'>
                     <li className='nav-item'>
-                      <Link href='/sell'>
-                        <a className='nav-link'>
-                          <img
-                            src='/images/cryptocurrency/cryptocurrency4.png'
-                            alt='image'
-                          />
-                          XRP - Ripple
-                        </a>
-                      </Link>
-                    </li>
-                    <li className='nav-item'>
-                      <Link href='/sell'>
-                        <a className='nav-link'>
-                          <img
-                            src='/images/cryptocurrency/cryptocurrency5.png'
-                            alt='image'
-                          />
-                          STE - Stellar
-                        </a>
-                      </Link>
-                    </li>
-
-                    <li className='nav-item'>
-                      <Link href='/sell'>
+                      <Link href='/work'>
                         <a className='nav-link'>
                           <img
                             src='/images/cryptocurrency/cryptocurrency2.png'
                             alt='image'
                           />
-                          BTC - Bitcoin
+                          Create Work
                         </a>
                       </Link>
                     </li>
-
                     <li className='nav-item'>
-                      <Link href='/sell'>
+                      <Link href='/stake'>
                         <a className='nav-link'>
                           <img
                             src='/images/cryptocurrency/cryptocurrency3.png'
                             alt='image'
                           />
-                          MIT - Litecoin
-                        </a>
-                      </Link>
-                    </li>
-                    <li className='nav-item'>
-                      <Link href='/cryptocurrency' activeClassName='active'>
-                        <a className='nav-link'>
-                          <i className='bx bxs-chevron-right-circle'></i>
-                          View All Coins
+                          Stake Work
                         </a>
                       </Link>
                     </li>
                   </ul>
-                </li>
-                <li className='nav-item'>
-                  <Link href='/prices' activeClassName='active'>
-                    <a className='nav-link'>Listings</a>
-                  </Link>
                 </li>
                 <li className='nav-item megamenu support'>
                   <Link href='/faq' activeClassName='active'>
@@ -296,28 +150,7 @@ const Navbar = () => {
                         </a>
                       </Link>
                     </li>
-                    <li className='nav-item'>
-                      <Link href='/contact' activeClassName='active'>
-                        <a className='nav-link'>
-                          <i className='bx bx-phone-call'></i>
-                          Contact Us
-                        </a>
-                      </Link>
-                    </li>
-                    <li className='nav-item'>
-                      <Link href='/affiliate' activeClassName='active'>
-                        <a className='nav-link'>
-                          <i className='bx bx-paper-plane'></i>
-                          Affiliates
-                        </a>
-                      </Link>
-                    </li>
                   </ul>
-                </li>
-                <li className='nav-item'>
-                  <Link href='/blog' activeClassName='active'>
-                    <a className='nav-link'>Blog</a>
-                  </Link>
                 </li>
               </ul>
               <div className='others-option'>
@@ -335,16 +168,6 @@ const Navbar = () => {
                       <i className='bx bxs-contact' ></i> Contact Us
                       </a>
                     </Link>
-                  </div>
-                  <div className='option-item'>
-                    <select className='form-select'>
-                      <option value='0'>English</option>
-                      <option value='1'>Türkçe</option>
-                      <option value='2'>Español</option>
-                      <option value='3'>한국어</option>
-                      <option value='4'>Italiano</option>
-                      <option value='5'>Polski</option>
-                    </select>
                   </div>
                 </div>
               </div>
