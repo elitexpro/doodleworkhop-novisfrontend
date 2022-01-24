@@ -3,6 +3,7 @@
 # dependencies
 /node_modules
 /node_modules.rar
+/out_origin.rar
 /.pnp
 .pnp.js
 
