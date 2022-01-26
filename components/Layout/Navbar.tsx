@@ -1,58 +1,39 @@
 import React,{useState, useEffect} from 'react';
-import Link from '../../utils/ActiveLink';
+import Link from '../../util/ActiveLink';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
-import { useSigningClient } from '../../cosmwasm/contexts/cosmwasm'
-import { 
-  PUBLIC_STAKING_DENOM,
-  PUBLIC_TOKEN_ESCROW_CONTRACT,
-  PUBLIC_CW20_CONTRACT
-} 
-from '../../cosmwasm/util/const'
-import {
-  convertMicroDenomToDenom, 
-  convertDenomToMicroDenom,
-  convertFromMicroDenom
-} from '../../cosmwasm/util/conversion'
+import { useSigningClient } from '../../contexts/cosmwasm'
 
 const Navbar = () => {
 
-    // wallet 
-
-  const [isadmin, setIsadmin] = useState(false)
-
-  const { walletAddress, connectWallet, signingClient, disconnect, loading } = useSigningClient()
+  const { 
+    walletAddress, 
+    connectWallet, 
+    signingClient, 
+    disconnect, 
+    loading,
+    getIsAdmin,
+    isAdmin,
+    getBalances,
+    nativeBalance,
+    cw20Balance
+  } = useSigningClient()
 
   const handleConnect = () => {
     if (walletAddress.length === 0) {
-      connectWallet().then((response) => {
-        NotificationManager.success('Successfully connected')  
-      }).catch((error) => {
-        NotificationManager.error('Connection failed')
-      })
+      connectWallet()
     } else {
       disconnect()
-      NotificationManager.info('Successfully disconnected')
     }
   }
 
   useEffect(() => {
-    if (!signingClient || walletAddress.length === 0) return
-
-    //Check if this user is admin
-    signingClient.queryContractSmart(PUBLIC_TOKEN_ESCROW_CONTRACT, {
-      is_admin: {addr:`${walletAddress}`},
-    }).then((response) => {
-      console.log(response)
-      setIsadmin(response.isadmin)
-
-    }).catch((error) => {
-      NotificationManager.error('IsAdmin query failed')
-      console.log(error)  
-    })
-  }, [signingClient, walletAddress])
-
+    if (!signingClient || walletAddress.length === 0)
+      return
+    getIsAdmin()
+    getBalances()
+  }, [walletAddress, signingClient, ])
   
   const [showMenu, setshowMenu] = useState(false);
   const toggleMenu = () => {
@@ -125,7 +106,7 @@ const Navbar = () => {
             <div className='collapse navbar-collapse mean-menu'>
               
               <ul className='navbar-nav'>
-                {!isadmin ? <></>:
+                {!isAdmin ? <></>:
                   <li className='nav-item'>
                     
                     <Link href='/admin' activeClassName='active'>
@@ -207,16 +188,25 @@ const Navbar = () => {
               </ul>
               <div className='others-option'>
                 <div className='d-flex align-items-center'>
-                  
-                  <i className= { loading ? 'bx bx-loader bx-spin bx-md' : '' }></i> 
-                  <div className="flex flex-grow lg:flex-grow-0 max-w-full ms-2">
-                    <button
-                      className="block default-btn w-full max-w-full truncate"
-                      onClick={handleConnect}
-                    >
-                      <i className= 'bx bxs-contact'></i> 
-                      {walletAddress || 'Connect Wallet'}
-                    </button>
+                    {walletAddress.length == 0 ?<></>:
+                        <div className='banner-wrapper-content'>
+                            <span className="sub-title ms-2" style={{"marginBottom":"0px", "fontSize":"16px"}}>
+                            {nativeBalance} JUNO 
+                            </span>
+                            <span className="sub-title ms-2" style={{"marginBottom":"0px", "fontSize":"16px", "backgroundColor": "var(--bs-pink)" }}>
+                            {cw20Balance} CREW
+                            </span>
+                        </div>
+                    }
+                    <i className= { loading ? 'bx bx-loader bx-spin bx-md' : '' }></i> 
+                    <div className="flex flex-grow lg:flex-grow-0 max-w-full ms-2">
+                        <button
+                        className="block default-btn w-full max-w-full truncate"
+                        onClick={handleConnect}
+                        >
+                            <i className= 'bx bxs-contact'></i> 
+                            {walletAddress ? walletAddress.substring(0,12) + "..." + walletAddress.substring(walletAddress.length - 6, walletAddress.length) :'Connect Wallet'}
+                        </button>
                   </div>
                   <div className='option-item'>
                     {walletAddress.length == 0 ? 

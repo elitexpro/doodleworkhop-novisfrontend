@@ -4,8 +4,47 @@ import Link from 'next/link';
 import ReactPaginate from 'react-paginate';
 const ascen = '../images/sort_asc.png';
 const descen = '../images/sort_desc.png';
+import {NotificationContainer, NotificationManager} from 'react-notifications'
+import moment from 'moment'
+import { useSigningClient } from '../contexts/cosmwasm'
+import { fromBase64, toBase64 } from '@cosmjs/encoding'
+import { CW20_DECIMAL } from '../hooks/cosmwasm'
+
 
 const StakeWork = () => {
+  const { 
+    walletAddress,
+    signingClient,
+    loading,
+    error,
+    connectWallet,
+    disconnect,
+    client,
+    getIsAdmin,
+    isAdmin,
+
+    getManagerConstants,
+    setManagerConstants,
+    setManagerAddr,
+    setMinStake,
+    setRateClient,
+    setRateManager,
+    managerAddr,
+    minStake,
+    rateClient,
+    rateManager,
+
+    getBalances,
+    nativeBalanceStr,
+    cw20Balance,
+    nativeBalance,
+
+    executeSendContract,
+    getDetailsAll,
+    detailsAll
+
+  } = useSigningClient()
+
   const [newData, setnewData] = useState([]);
 
   //search
@@ -14,32 +53,41 @@ const StakeWork = () => {
   const [value, setValue] = useState(10);
 
   //paginate
-  const [pageNumber, setpageNumber] = useState(0);
+  const [pageNumber, setpageNumber] = useState(0)
   const coinsPerPage = 20;
   const pagesVisited = pageNumber * coinsPerPage;
-  const pageCount = Math.ceil(newData.length / coinsPerPage);
+  const [pageCount, setPageCount] = useState(0)
   const changePage = ({ selected }) => {
     setpageNumber(selected);
   };
 
   useEffect(() => {
-    const getCoins = async () => {
-      const { data } = await axios.get(
-        'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false'
-      );
+    if (!signingClient || walletAddress.length === 0) 
+      return
+    getDetailsAll()
+  }, [signingClient, walletAddress])
 
-      setnewData(data);
-    };
-    getCoins();
-  }, []);
+  useEffect(() => {
+    if (detailsAll == null || detailsAll.escrows == null)
+      return
+    console.log(detailsAll.escrows)
+    setnewData(detailsAll.escrows)
+    setPageCount(Math.ceil(detailsAll?.escrows.length / coinsPerPage))
+
+  }, [detailsAll])
 
   const search = (rows) => {
-    return rows.filter((row) => row.name.toLowerCase().indexOf(q) > -1);
+    return rows.filter((row) => 
+    (
+      row.work_title.toLowerCase().indexOf(q.toLocaleLowerCase()) > -1 || 
+      row.work_desc.toLowerCase().indexOf(q.toLocaleLowerCase()) > -1 ||
+      row.work_url.toLowerCase().indexOf(q.toLocaleLowerCase()) > -1 
+      ));
   };
 
   return (
     <>
-      <div className='market-health-area pt-100 pb-70'>
+      <div className='market-health-area pt-100 pb-10'>
         <div className='container'>
           <div className='section-title'>
             <h2>
@@ -49,7 +97,7 @@ const StakeWork = () => {
           
         </div>
       </div>
-      <div className='container pb-70'>
+      <div className='container pb-10'>
         <div className='row'>
           <div className='price-filter'>
             
@@ -68,10 +116,11 @@ const StakeWork = () => {
             <table className='table'>
               <thead>
                 <tr>
-                  <th scope='col'>Name</th>
+                  <th scope='col'>Title</th>
                   <th scope='col'>Desc</th>
-                  <th scope='col'>Create Time</th>
-                  <th scope='col'>Minimum Stake Token</th>
+                  <th scope='col'>Stake Amount</th>
+                  <th scope='col'>Start Time</th>
+                  <th scope='col'>Url</th>
                   <th scope='col'>Action</th>
                 </tr>
               </thead>
@@ -83,27 +132,12 @@ const StakeWork = () => {
                     .slice(0 || pagesVisited, pagesVisited + coinsPerPage)
                     .map((data) => (
                       <tr key={data.id}>
-                        <td>
-                          <div className='d-flex align-items-center crypto-image'>
-                            <img src={data.image} alt='image' />
-                            <h3 className='mb-0 crypto-name'>{data.name}</h3>
-                          </div>
-                        </td>
-                        <td>USD {data.current_price}</td>
-                        <td>
-                          {data.price_change_percentage_24h < 0 ? (
-                            <span className='trending down'>
-                              <i className='fas fa-caret-down'></i> -
-                              {data.price_change_percentage_24h.toFixed(2)}%
-                            </span>
-                          ) : (
-                            <span className='trending up'>
-                              <i className='fas fa-caret-up'></i> +
-                              {data.price_change_percentage_24h.toFixed(2)}%
-                            </span>
-                          )}
-                        </td>
-                        <td>${data.total_volume}</td>
+                        
+                        <td>{data.work_title}</td>
+                        <td>{data.work_desc}</td>
+                        <td>{data.stake_amount / CW20_DECIMAL}</td>
+                        <td>{moment(new Date(data.start_time * 1000)).format('YYYY/MM/DD HH:mm:ss')}</td>
+                        <td>{data.work_url}</td>
                         <td>
                           <Link href='https://www.coinbase.com/accounts'>
                             <a className='link-btn'>Trade</a>
@@ -116,7 +150,7 @@ const StakeWork = () => {
 
             <div className='count-pagination'>
               <p className='price-count'>
-                Showing 1 to 20 of {newData.length} entries
+                Showing 1 to 20 of {newData?.length} entries
               </p>
 
               <div className='pagination'>

@@ -14,6 +14,31 @@ let { Provider } = (CosmWasmContext =
     error: null,
     connectWallet: () => {},
     disconnect: () => {},
+
+    getIsAdmin: () => {},
+    isAdmin: false,
+
+    getManagerConstants: () => {},
+    setManagerConstants: () => {},
+    setManagerAddr: () => {},
+    setMinStake: () => {},
+    setRateClient: () => {},
+    setRateManager: () => {},
+    
+    managerAddr: '',
+    minStake: 0,
+    rateClient: 0,
+    rateManager: 0,
+
+    getBalances: () => {},
+    nativeBalanceStr: '',
+    cw20Balance: 0,
+    nativeBalance: 0,
+
+    executeSendContract:(plainMsg:string, amount:number) => {},
+
+    getDetailsAll:() => {},
+    detailsAll: null
   }))
 
 export const useSigningClient = (): ISigningCosmWasmClientContext =>

@@ -3,57 +3,37 @@ import TextField from '@mui/material/TextField';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
-import { useSigningClient } from '../cosmwasm/contexts/cosmwasm'
-import { 
-  PUBLIC_STAKING_DENOM,
-  PUBLIC_TOKEN_ESCROW_CONTRACT,
-  PUBLIC_CW20_CONTRACT,
-  defaultFee
-} 
-from '../cosmwasm/util/const'
-import { fromBase64, toBase64 } from '@cosmjs/encoding'
+import { useSigningClient } from '../contexts/cosmwasm'
 
 const Admin = () => {
 
-  const [isadmin, setIsadmin] = useState(false)
+  const { 
+    walletAddress, 
+    connectWallet, 
+    signingClient, 
+    disconnect, 
+    loading,
+    getIsAdmin,
+    isAdmin,
+    getManagerConstants,
+    setManagerConstants,
+    setManagerAddr,
+    setMinStake,
+    setRateClient,
+    setRateManager,
+    managerAddr,
+    minStake,
+    rateClient,
+    rateManager
+  } = useSigningClient()
 
-  const [managerAddr, setManagerAddr] = useState('')
-  const [minStake, setMinStake] = useState(10)
-  const [rateClient, setRateClient] = useState(10)
-  const [rateManager, setRateManager] = useState(10)
-
-  const { walletAddress, connectWallet, signingClient, disconnect, loading } = useSigningClient()
 
   useEffect(() => {
-    if (!signingClient || walletAddress.length === 0) return
+    if (!signingClient || walletAddress.length === 0 || !isAdmin) return
+    getManagerConstants()
+  }, [signingClient, walletAddress, isAdmin, ])
 
-    //Check if this user is admin
-    signingClient.queryContractSmart(PUBLIC_TOKEN_ESCROW_CONTRACT, {
-      is_admin: {addr:`${walletAddress}`},
-    }).then((response) => {
-      setIsadmin(response.isadmin)
-      
-    }).catch((error) => {
-      NotificationManager.error('IsAdmin query failed')  
-    })
-  }, [walletAddress])
-  
-  useEffect(() => {
-    if (!signingClient || walletAddress.length === 0) return
-    if (!isadmin) return
-    signingClient.queryContractSmart(PUBLIC_TOKEN_ESCROW_CONTRACT, {
-      constants: {},
-    }).then((response) => {
-      console.log(response)
-      setManagerAddr(response.manager_addr)
-      setMinStake(response.min_stake)
-      setRateClient(response.rate_client)
-      setRateManager(response.rate_manager)
 
-    }).catch((error) => {
-      NotificationManager.error('GetConstants query failed')  
-    })
-  }, [loading, isadmin, ])
 
   const handleSubmit = (event: MouseEvent<HTMLElement>) => {
     if (!signingClient || walletAddress.length === 0) {
@@ -61,40 +41,19 @@ const Admin = () => {
       return
     }
     
-    if (!isadmin) {
+    if (!isAdmin) {
       NotificationManager.error('You are not manager')  
       return
     }
     
     if (managerAddr == '') {
-      NotificationManager.error('Please input manager address')  
+      NotificationManager.error('Please input the manager address')  
       return
     }
-    signingClient?.execute(
-      walletAddress, // sender address
-      PUBLIC_TOKEN_ESCROW_CONTRACT, // token escrow contract
-      { 
-        "set_constant":
-        {
-          "manager_addr":`${managerAddr}`, 
-          "min_stake":`${minStake}`, 
-          "rate_client": `${rateClient}`,
-          "rate_manager": `${rateManager}`
-        } 
-      }, // msg
-      defaultFee,
-      undefined,
-      []
-    ).then((response) => {
-      NotificationManager.success('Successfully changed')
-    }).catch((error) => {
-      NotificationManager.error(`SetConstant error : ${error.message}`)
-    })
-    
+    event.preventDefault()
+
+    setManagerConstants()
   }
-
-
-
 
   return (
     <>
