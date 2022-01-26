@@ -14,17 +14,15 @@ const AppDownload = () => {
               <div className='app-download-content'>
                 <h2>Trade On The Mobile App</h2>
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco.
+                  Mobile Keplr is also available
                 </p>
                 <div className='btn-box'>
-                  <a href='#' className='playstore-btn' target='_blank'>
+                  <a href="https://play.google.com/store/apps/details?id=com.chainapsis.keplr" className='playstore-btn' target='_blank'>
                     <img src='/images/play-store.png' alt='image' />
                     Get It On
                     <span>Google Play</span>
                   </a>
-                  <a href='#' className='applestore-btn' target='_blank'>
+                  <a href="https://apps.apple.com/us/app/keplr-wallet/id1567851089" className='applestore-btn' target='_blank'>
                     <img src='/images/apple-store.png' alt='image' />
                     Download on the
                     <span>Apple Store</span>

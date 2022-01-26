@@ -5,7 +5,7 @@ import ReactPaginate from 'react-paginate';
 const ascen = '../images/sort_asc.png';
 const descen = '../images/sort_desc.png';
 
-const Prices = () => {
+const StakeWork = () => {
   const [newData, setnewData] = useState([]);
 
   //search
@@ -43,89 +43,16 @@ const Prices = () => {
         <div className='container'>
           <div className='section-title'>
             <h2>
-              Market is Up <span>+5.24%</span>
+              Work List
             </h2>
-            <p>In the past 24 hours</p>
           </div>
-          <ul className='market-health-list'>
-            <li>
-              <h3>Top Gainer (24h)</h3>
-              <div className='d-flex align-items-center justify-content-between'>
-                <div className='title'>
-                  <img src='/images/cryptocurrency/bitcoin.png' alt='image' />
-                  <span className='name'>Bitcoin</span>
-                  <span className='status up'>+25.28%</span>
-                </div>
-                <div className='price'>
-                  <span>$45.71</span>
-                  <img src='/images/cryptocurrency/chart1.png' alt='image' />
-                </div>
-              </div>
-            </li>
-            <li>
-              <h3>New Listing</h3>
-              <div className='d-flex align-items-center justify-content-between'>
-                <div className='title'>
-                  <img src='/images/cryptocurrency/cardano.png' alt='image' />
-                  <span className='name'>Cardano</span>
-                  <span className='status'>Added Mar 24</span>
-                </div>
-                <div className='price'>
-                  <span>$40.50</span>
-                  <img src='/images/cryptocurrency/chart2.png' alt='image' />
-                </div>
-              </div>
-            </li>
-            <li>
-              <h3>Highest Volume (24h)</h3>
-              <div className='d-flex align-items-center justify-content-between'>
-                <div className='title'>
-                  <img src='/images/cryptocurrency/tether.png' alt='image' />
-                  <span className='name'>Tether</span>
-                  <span className='status'>$4.95T</span>
-                </div>
-                <div className='price'>
-                  <span>$4,779,476.22</span>
-                  <img src='/images/cryptocurrency/chart3.png' alt='image' />
-                </div>
-              </div>
-            </li>
-            <li>
-              <h3>Most Visited (24h)</h3>
-              <div className='d-flex align-items-center justify-content-between'>
-                <div className='title'>
-                  <img src='/images/cryptocurrency/usd-coin.png' alt='image' />
-                  <span className='name'>USD Coin</span>
-                  <span className='status up'>+70.41% views</span>
-                </div>
-                <div className='price'>
-                  <span>$7,271.29</span>
-                  <img src='/images/cryptocurrency/chart4.png' alt='image' />
-                </div>
-              </div>
-            </li>
-          </ul>
+          
         </div>
       </div>
       <div className='container pb-70'>
         <div className='row'>
           <div className='price-filter'>
-            <div className='col-md-2 price-select'>
-              <span>Show</span>
-              <select className='form-select price-select'>
-                <option value='1'>1</option>
-                <option value='2'>2</option>
-                <option value='3'>3</option>
-                <option value='4'>4</option>
-                <option value='5'>5</option>
-                <option value='6'>6</option>
-                <option value='7'>7</option>
-                <option value='8'>8</option>
-                <option value='9'>9</option>
-                <option value='10'>10</option>
-              </select>{' '}
-              <span>Entries</span>
-            </div>
+            
 
             <div className='col-md-3'>
               Search:{' '}
@@ -141,10 +68,10 @@ const Prices = () => {
             <table className='table'>
               <thead>
                 <tr>
-                  <th scope='col'>Currency</th>
-                  <th scope='col'>Price</th>
-                  <th scope='col'>Change (24h)</th>
-                  <th scope='col'>MarketCap</th>
+                  <th scope='col'>Name</th>
+                  <th scope='col'>Desc</th>
+                  <th scope='col'>Create Time</th>
+                  <th scope='col'>Minimum Stake Token</th>
                   <th scope='col'>Action</th>
                 </tr>
               </thead>
@@ -209,4 +136,4 @@ const Prices = () => {
   );
 };
 
-export default Prices;
+export default StakeWork;

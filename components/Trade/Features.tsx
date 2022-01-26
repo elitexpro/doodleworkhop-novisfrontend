@@ -4,11 +4,9 @@ const Features = () => {
       <div className='features-area pt-100 pb-70'>
         <div className='container'>
           <div className='section-title'>
-            <h2>How To Buy Bitcoin</h2>
+            <h2>How To Create work</h2>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco.
+              Just stake 10% of real amount you require.
             </p>
           </div>
           <div className='row align-items-center justify-content-center'>

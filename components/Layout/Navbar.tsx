@@ -4,30 +4,66 @@ import {NotificationContainer, NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
 import { useSigningClient } from '../../cosmwasm/contexts/cosmwasm'
-
-const PUBLIC_STAKING_DENOM = process.env.NEXT_PUBLIC_STAKING_DENOM || 'ujuno'
-const PUBLIC_TOKEN_ESCROW_CONTRACT = process.env.NEXT_PUBLIC_TOKEN_ESCROW_CONTRACT || ''
-const PUBLIC_CW20_CONTRACT = process.env.NEXT_PUBLIC_CW20_CONTRACT || ''
+import { 
+  PUBLIC_STAKING_DENOM,
+  PUBLIC_TOKEN_ESCROW_CONTRACT,
+  PUBLIC_CW20_CONTRACT
+} 
+from '../../cosmwasm/util/const'
+import {
+  convertMicroDenomToDenom, 
+  convertDenomToMicroDenom,
+  convertFromMicroDenom
+} from '../../cosmwasm/util/conversion'
 
 const Navbar = () => {
-  const [showMenu, setshowMenu] = useState(false);
-  const toggleMenu = () => {
-    setshowMenu(!showMenu)
-  };
+
+    // wallet 
+
+  const [isadmin, setIsadmin] = useState(false)
 
   const { walletAddress, connectWallet, signingClient, disconnect, loading } = useSigningClient()
-  const [isadmin, setIsadmin] = useState(false)
+
+  // const [balance, setBalance] = useState('')
+  // const [cw20Balance, setCw20Balance] = useState(0)
+  // const [walletAmount, setWalletAmount] = useState(0)
+
+  // //Get Balances on Connect wallet
+  // useEffect(() => {
+  //   if (!signingClient || walletAddress.length === 0) return
+
+  //   NotificationManager.info(`Loading changed`)
+  //   // Gets native balance (i.e. Juno balance)
+  //   signingClient.getBalance(walletAddress, PUBLIC_STAKING_DENOM).then((response: any) => {
+  //     const { amount, denom }: { amount: number; denom: string } = response
+  //     setBalance(`${convertMicroDenomToDenom(amount)} ${convertFromMicroDenom(denom)}`)
+  //     setWalletAmount(convertMicroDenomToDenom(amount))
+  //   }).catch((error) => {
+  //     NotificationManager.error(`GetBalance Error : ${error.message}`)
+  //   })
+
+  //   // Gets cw20 balance
+  //   signingClient.queryContractSmart(PUBLIC_CW20_CONTRACT, {
+  //     balance: { address: walletAddress },
+  //   }).then((response) => {
+  //     setCw20Balance(parseInt(response.balance) / 1000)
+  //   }).catch((error) => {
+  //     NotificationManager.error(`GetCrewBalance Error : ${error.message}`)
+  //   })
+  // }, [loading, ])
+
+
 
   const handleConnect = () => {
     if (walletAddress.length === 0) {
       connectWallet().then((response) => {
-        NotificationManager.success('Successfully Connected', 'Connection', 1000)  
+        NotificationManager.success('Successfully connected')  
       }).catch((error) => {
-        NotificationManager.error('Connection Failed', 'Connection', 3000)  
+        NotificationManager.error('Connection failed')
       })
     } else {
       disconnect()
-      NotificationManager.info('Successfully Disconnected', 'Connection', 3000)
+      NotificationManager.info('Successfully disconnected')
     }
   }
 
@@ -42,10 +78,15 @@ const Navbar = () => {
       setIsadmin(response.isadmin)
 
     }).catch((error) => {
-      NotificationManager.error('iadmin Query Failed', 'Query', 3000)  
+      NotificationManager.error('IsAdmin query failed')  
     })
   }, [signingClient, walletAddress])
 
+  
+  const [showMenu, setshowMenu] = useState(false);
+  const toggleMenu = () => {
+    setshowMenu(!showMenu)
+  };
   useEffect(() => {
     let elementId = document.getElementById('navbar');
     document.addEventListener('scroll', () => {
@@ -57,6 +98,8 @@ const Navbar = () => {
     });
     window.scrollTo(0, 0);
   }, []);
+
+
 
   return (
     <>
@@ -111,51 +154,46 @@ const Navbar = () => {
             <div className='collapse navbar-collapse mean-menu'>
               
               <ul className='navbar-nav'>
-                {walletAddress.length==0 || isadmin ? <></>:
+                {isadmin ? <></>:
                   <li className='nav-item'>
-                    <Link href='#' activeClassName='active'>
-                      <a className='dropdown-toggle nav-link'>Admin</a>
+                    
+                    <Link href='/admin' activeClassName='active'>
+                      <a className='nav-link'>Admin</a>
                     </Link>
-                    <ul className='dropdown-menu'>
-                      <li className='nav-item'>
-                        <Link href='/admin' activeClassName='active'>
-                          <a className='nav-link'>Work List</a>
-                        </Link>
-                      </li>
-                    </ul>
+                    
                   </li>
                 }
-                {walletAddress.length==0 ? <></>:
-                  <li className='nav-item megamenu'>
-                    <Link href='#' activeClassName='active'>
-                      <a className='dropdown-toggle nav-link'>Works</a>
-                    </Link>
-                    <ul className='dropdown-menu'>
-                      <li className='nav-item'>
-                        <Link href='/work'>
-                          <a className='nav-link'>
-                            <img
-                              src='/images/cryptocurrency/cryptocurrency2.png'
-                              alt='image'
-                            />
-                            Create Work
-                          </a>
-                        </Link>
-                      </li>
-                      <li className='nav-item'>
-                        <Link href='/stake'>
-                          <a className='nav-link'>
-                            <img
-                              src='/images/cryptocurrency/cryptocurrency3.png'
-                              alt='image'
-                            />
-                            Stake Work
-                          </a>
-                        </Link>
-                      </li>
-                    </ul>
-                  </li>
-                }
+                
+                <li className='nav-item megamenu'>
+                  <Link href='#' activeClassName='active'>
+                    <a className='dropdown-toggle nav-link'>Works</a>
+                  </Link>
+                  <ul className='dropdown-menu'>
+                    <li className='nav-item'>
+                      <Link href='/creatework'>
+                        <a className='nav-link'>
+                          <img
+                            src='/images/cryptocurrency/cryptocurrency2.png'
+                            alt='image'
+                          />
+                          Create Work
+                        </a>
+                      </Link>
+                    </li>
+                    <li className='nav-item'>
+                      <Link href='/stakework'>
+                        <a className='nav-link'>
+                          <img
+                            src='/images/cryptocurrency/cryptocurrency3.png'
+                            alt='image'
+                          />
+                          Stake Work
+                        </a>
+                      </Link>
+                    </li>
+                  </ul>
+                </li>
+              
                 <li className='nav-item megamenu support'>
                   <Link href='/faq' activeClassName='active'>
                     <a className='dropdown-toggle nav-link'>Support</a>
@@ -198,6 +236,16 @@ const Navbar = () => {
               </ul>
               <div className='others-option'>
                 <div className='d-flex align-items-center'>
+                  {/* {walletAddress.length == 0 ?<></>:
+                  <div className='banner-wrapper-content'>
+                    <span className="sub-title" style={{"marginBottom":"0px", "fontSize":"16px"}}>
+                      {walletAmount}JUNO 
+                    </span>
+                    <span className="sub-title" style={{"marginBottom":"0px", "fontSize":"16px"}}>
+                      {cw20Balance}CREW
+                    </span>
+                  </div>
+                  } */}
                   <i className= { loading ? 'bx bx-loader bx-spin bx-md' : '' }></i> 
                   <div className="flex flex-grow lg:flex-grow-0 max-w-full ms-2">
                     <button
