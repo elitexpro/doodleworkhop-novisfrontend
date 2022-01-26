@@ -15,6 +15,7 @@ import { fromBase64, toBase64 } from '@cosmjs/encoding'
 
 const Admin = () => {
 
+  const [isadmin, setIsadmin] = useState(false)
 
   const [managerAddr, setManagerAddr] = useState('')
   const [minStake, setMinStake] = useState(10)
@@ -26,6 +27,20 @@ const Admin = () => {
   useEffect(() => {
     if (!signingClient || walletAddress.length === 0) return
 
+    //Check if this user is admin
+    signingClient.queryContractSmart(PUBLIC_TOKEN_ESCROW_CONTRACT, {
+      is_admin: {addr:`${walletAddress}`},
+    }).then((response) => {
+      setIsadmin(response.isadmin)
+      
+    }).catch((error) => {
+      NotificationManager.error('IsAdmin query failed')  
+    })
+  }, [walletAddress])
+  
+  useEffect(() => {
+    if (!signingClient || walletAddress.length === 0) return
+    if (!isadmin) return
     signingClient.queryContractSmart(PUBLIC_TOKEN_ESCROW_CONTRACT, {
       constants: {},
     }).then((response) => {
@@ -38,11 +53,16 @@ const Admin = () => {
     }).catch((error) => {
       NotificationManager.error('GetConstants query failed')  
     })
-  }, [loading, ])
+  }, [loading, isadmin, ])
 
   const handleSubmit = (event: MouseEvent<HTMLElement>) => {
     if (!signingClient || walletAddress.length === 0) {
       NotificationManager.error('Please connect wallet first')  
+      return
+    }
+    
+    if (!isadmin) {
+      NotificationManager.error('You are not manager')  
       return
     }
     

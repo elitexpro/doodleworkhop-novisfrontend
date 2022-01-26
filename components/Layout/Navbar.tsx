@@ -24,36 +24,6 @@ const Navbar = () => {
 
   const { walletAddress, connectWallet, signingClient, disconnect, loading } = useSigningClient()
 
-  // const [balance, setBalance] = useState('')
-  // const [cw20Balance, setCw20Balance] = useState(0)
-  // const [walletAmount, setWalletAmount] = useState(0)
-
-  // //Get Balances on Connect wallet
-  // useEffect(() => {
-  //   if (!signingClient || walletAddress.length === 0) return
-
-  //   NotificationManager.info(`Loading changed`)
-  //   // Gets native balance (i.e. Juno balance)
-  //   signingClient.getBalance(walletAddress, PUBLIC_STAKING_DENOM).then((response: any) => {
-  //     const { amount, denom }: { amount: number; denom: string } = response
-  //     setBalance(`${convertMicroDenomToDenom(amount)} ${convertFromMicroDenom(denom)}`)
-  //     setWalletAmount(convertMicroDenomToDenom(amount))
-  //   }).catch((error) => {
-  //     NotificationManager.error(`GetBalance Error : ${error.message}`)
-  //   })
-
-  //   // Gets cw20 balance
-  //   signingClient.queryContractSmart(PUBLIC_CW20_CONTRACT, {
-  //     balance: { address: walletAddress },
-  //   }).then((response) => {
-  //     setCw20Balance(parseInt(response.balance) / 1000)
-  //   }).catch((error) => {
-  //     NotificationManager.error(`GetCrewBalance Error : ${error.message}`)
-  //   })
-  // }, [loading, ])
-
-
-
   const handleConnect = () => {
     if (walletAddress.length === 0) {
       connectWallet().then((response) => {
@@ -72,13 +42,14 @@ const Navbar = () => {
 
     //Check if this user is admin
     signingClient.queryContractSmart(PUBLIC_TOKEN_ESCROW_CONTRACT, {
-      isadmin: {},
+      is_admin: {addr:`${walletAddress}`},
     }).then((response) => {
       console.log(response)
       setIsadmin(response.isadmin)
 
     }).catch((error) => {
-      NotificationManager.error('IsAdmin query failed')  
+      NotificationManager.error('IsAdmin query failed')
+      console.log(error)  
     })
   }, [signingClient, walletAddress])
 
@@ -154,7 +125,7 @@ const Navbar = () => {
             <div className='collapse navbar-collapse mean-menu'>
               
               <ul className='navbar-nav'>
-                {isadmin ? <></>:
+                {!isadmin ? <></>:
                   <li className='nav-item'>
                     
                     <Link href='/admin' activeClassName='active'>
@@ -236,16 +207,7 @@ const Navbar = () => {
               </ul>
               <div className='others-option'>
                 <div className='d-flex align-items-center'>
-                  {/* {walletAddress.length == 0 ?<></>:
-                  <div className='banner-wrapper-content'>
-                    <span className="sub-title" style={{"marginBottom":"0px", "fontSize":"16px"}}>
-                      {walletAmount}JUNO 
-                    </span>
-                    <span className="sub-title" style={{"marginBottom":"0px", "fontSize":"16px"}}>
-                      {cw20Balance}CREW
-                    </span>
-                  </div>
-                  } */}
+                  
                   <i className= { loading ? 'bx bx-loader bx-spin bx-md' : '' }></i> 
                   <div className="flex flex-grow lg:flex-grow-0 max-w-full ms-2">
                     <button

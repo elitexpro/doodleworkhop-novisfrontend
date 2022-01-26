@@ -5,6 +5,8 @@ export const PUBLIC_CW20_CONTRACT = process.env.NEXT_PUBLIC_CW20_CONTRACT || ''
 export const defaultFee = {
   amount: [],
   gas: "400000",
-};
+}
+
+export const CW20_DECIMAL = 1000
 
 

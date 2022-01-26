@@ -12,7 +12,8 @@ import {
   PUBLIC_STAKING_DENOM,
   PUBLIC_TOKEN_ESCROW_CONTRACT,
   PUBLIC_CW20_CONTRACT,
-  defaultFee
+  defaultFee,
+  CW20_DECIMAL
 } 
 from '../cosmwasm/util/const'
 import {
@@ -26,21 +27,48 @@ import { fromBase64, toBase64 } from '@cosmjs/encoding'
 const CreateWork = () => {
 
 
+  //Work Variables
   const [workTitle, setWorkTitle] = useState('')
   const [workDesc, setWorkDesc] = useState('')
   const [workUrl, setWorkUrl] = useState('')
-  const [rateClient, setRateClient] = useState(10)
   const [startDate, setStartDate] = useState<Date | null>(new Date())
   const [stakeAmount, setStakeAmount] = useState(0)
+  const [accountMinStakeAmount, setAccountMinStakeAmount] = useState(0)
   const [clientStakeAmount, setClientStakeAmount] = useState(0)
 
   
+  //Balance variables
   const [balance, setBalance] = useState('')
   const [cw20Balance, setCw20Balance] = useState(0)
   const [walletAmount, setWalletAmount] = useState(0)
   const [executing, setExecuting] = useState(false)
 
+  //Global Variables
+  const [managerAddr, setManagerAddr] = useState('')
+  const [minStake, setMinStake] = useState(10)
+  const [rateClient, setRateClient] = useState(10)
+  const [rateManager, setRateManager] = useState(10)
+
   const { walletAddress, connectWallet, signingClient, disconnect, loading } = useSigningClient()
+
+
+  //Get Admin parameters
+  useEffect(() => {
+    if (!signingClient || walletAddress.length === 0) return
+
+    signingClient.queryContractSmart(PUBLIC_TOKEN_ESCROW_CONTRACT, {
+      constants: {},
+    }).then((response) => {
+      setManagerAddr(response.manager_addr)
+      setMinStake(response.min_stake)
+      setRateClient(response.rate_client)
+      setRateManager(response.rate_manager)
+
+      setStakeAmount(response.min_stake)
+    }).catch((error) => {
+      NotificationManager.error('GetConstants query failed')  
+    })
+  }, [walletAddress])
 
   //Get Balances on Connect wallet
   useEffect(() => {
@@ -59,21 +87,11 @@ const CreateWork = () => {
     signingClient.queryContractSmart(PUBLIC_CW20_CONTRACT, {
       balance: { address: walletAddress },
     }).then((response) => {
-      setCw20Balance(parseInt(response.balance) / 1000)
+      setCw20Balance(parseInt(response.balance) / CW20_DECIMAL)
     }).catch((error) => {
       NotificationManager.error(`GetCrewBalance Error : ${error.message}`)
     })
-
-    signingClient.queryContractSmart(PUBLIC_TOKEN_ESCROW_CONTRACT, {
-      constants: {},
-    }).then((response) => {
-      console.log(response)
-      setRateClient(response.rate_client)
-
-    }).catch((error) => {
-      NotificationManager.error(`GetConstants error : ${error.message}`)  
-    })
-
+    
   }, [loading, executing])
 
   useEffect(() => {
@@ -104,19 +122,24 @@ const CreateWork = () => {
     }
     console.log(start_time)
 
-    // "end_time": "${end_time}" \
+    let workId:string = toBase64(new TextEncoder().encode(walletAddress+"_"+workTitle))
+
     let plainMsg:string = 
       `{ \
         "create" : { \
-          "title":"${workTitle}", \
-          "desc": "${workDesc}", \
-          "url": "${workUrl}", \
-          "start_time": ${start_time} \
+          "id": "${workId}", \
+          "client" : "${walletAddress}", \
+          "work_title":"${workTitle}", \
+          "work_desc": "${workDesc}", \
+          "work_url": "${workUrl}", \
+          "start_time": ${start_time}, \
+          "account_min_stake_amount": ${accountMinStakeAmount*CW20_DECIMAL}, \
+          "stake_amount": ${stakeAmount*CW20_DECIMAL} \
         } \
       }`
     console.log(plainMsg)
-    let uint8array:Uint8Array = new TextEncoder().encode(plainMsg);
-    let encodedMsg:string = toBase64(uint8array)
+ 
+    let encodedMsg:string = toBase64(new TextEncoder().encode(plainMsg))
 
     signingClient?.execute(
       walletAddress, // sender address
@@ -125,7 +148,7 @@ const CreateWork = () => {
         "send":
         {
           "contract":PUBLIC_TOKEN_ESCROW_CONTRACT, 
-          "amount":(clientStakeAmount*1000).toString(), 
+          "amount":(clientStakeAmount*CW20_DECIMAL).toString(), 
           "msg": encodedMsg
         } 
       }, // msg
@@ -138,9 +161,9 @@ const CreateWork = () => {
     }).catch((error) => {
       NotificationManager.error(`Create Work Error: ${error.message}`)
       setExecuting(false)
+      console.log(error)
     })
   }
-
 
   return (
     <>
@@ -156,8 +179,8 @@ const CreateWork = () => {
                   <h3 style={{ "color":"white" }}>Your Balance</h3>
                   <br/>
                   <h4 style={{ "color":"white" }}>
-                    Juno : {walletAmount} <br/>
-                    Crew : {cw20Balance} <br/>
+                    {walletAmount} JUNO <br/>
+                    {cw20Balance} CREW <br/>
                   </h4>
 
                 </p>
@@ -193,13 +216,10 @@ const CreateWork = () => {
                   />
                 </div>
 
-                {/* <div className="flex flex-col justify-center m-4">
-                  <h1 className="text-3xl font-bold justify-center mb-4">
-                    Start DateTime
-                  </h1>
-                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <div className="currency-selection row">
+                <span className="flex mb-2">Start DateTime for your Work</span>
+                  <LocalizationProvider dateAdapter={AdapterDateFns} className="col-md-3">
                     <DateTimePicker
-                      className="max-w-full text-2xl"
                       renderInput={(params) => <TextField {...params} />}
                       value={startDate}
                       onChange={(newValue) => {
@@ -208,21 +228,35 @@ const CreateWork = () => {
                       minDateTime={startDate}
                     />
                   </LocalizationProvider>
-                </div> */}
+                </div>
 
                 <div className='currency-selection'>
-                  <span>Stake Amount for your Work(CREW)</span>
+                  <span>Each Account's Minimun Stake Amount for your Work(CREW)</span>
                   <TextField fullWidth type="number" 
                     variant="standard" 
-                    inputProps={{ inputMode: 'numeric', pattern: '[0-9]*', min:10, max:1000 }} 
-                  value={stakeAmount}
-                  onChange={(e) => setStakeAmount(Number(e.target.value))}
+                    inputProps={{ inputMode: 'numeric', pattern: '[0-9]*', min:0, max: stakeAmount }} 
+                    value={accountMinStakeAmount}
+                    onChange={(e) => setAccountMinStakeAmount(Number(e.target.value))}
+                  />
+                </div>
+
+                <div className='currency-selection'>
+                  <span>Total Stake Amount for your Work(CREW)</span>
+                  <TextField fullWidth type="number" 
+                    variant="standard" 
+                    inputProps={{ inputMode: 'numeric', pattern: '[0-9]*', min:minStake }} 
+                    value={stakeAmount}
+                    onChange={(e) => setStakeAmount(Number(e.target.value))}
                   />
                 </div>
                 
                 <div className='currency-selection'>
-                  <span>Client Stake Amount : ${clientStakeAmount}</span>
-                  
+                  <span>Client's Self Stake Amount(CREW)</span>
+                  <TextField fullWidth type="number" 
+                    variant="standard" 
+                    value={clientStakeAmount}
+                    disabled={true}
+                  />
                 </div>
 
 
