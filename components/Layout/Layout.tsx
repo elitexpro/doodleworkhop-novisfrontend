@@ -17,7 +17,7 @@ const Layout = ({ children }) => {
   return (
     <>
       <Head>
-        <title>Novis - React/Next Cryptocurrency Template</title>
+        <title>Doodle Workshop</title>
         <meta
           name='viewport'
           content='width=device-width, initial-scale=1, shrink-to-fit=no'

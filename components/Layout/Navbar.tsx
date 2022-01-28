@@ -107,43 +107,58 @@ const Navbar = () => {
               
               <ul className='navbar-nav'>
                 {!isAdmin ? <></>:
-                  <li className='nav-item'>
-                    
-                    <Link href='/admin' activeClassName='active'>
-                      <a className='nav-link'>Admin</a>
+                  <li className='nav-item '>
+                    <Link href='#' activeClassName='active'>
+                      <a className='dropdown-toggle nav-link'>Admin</a>
                     </Link>
-                    
+                    <ul className='dropdown-menu'>
+                      <li className='nav-item'>
+                        <Link href='/adminconstants'>
+                          <a className='nav-link'>
+                            Constants
+                          </a>
+                        </Link>
+                      </li>
+                      <li className='nav-item'>
+                        <Link href='/adminrewards'>
+                          <a className='nav-link'>
+                            Rewards
+                          </a>
+                        </Link>
+                      </li>
+                    </ul>
                   </li>
                 }
                 
-                <li className='nav-item megamenu'>
+                <li className='nav-item megamenu support'>
                   <Link href='#' activeClassName='active'>
-                    <a className='dropdown-toggle nav-link'>Works</a>
+                    <a className='dropdown-toggle nav-link'>My Works</a>
                   </Link>
                   <ul className='dropdown-menu'>
                     <li className='nav-item'>
                       <Link href='/creatework'>
                         <a className='nav-link'>
-                          <img
-                            src='/images/cryptocurrency/cryptocurrency2.png'
-                            alt='image'
-                          />
+                          <i className='bx bx-info-circle'></i>
                           Create Work
                         </a>
                       </Link>
+                      
                     </li>
                     <li className='nav-item'>
-                      <Link href='/stakework'>
+                      <Link href='/clientrewards'>
                         <a className='nav-link'>
-                          <img
-                            src='/images/cryptocurrency/cryptocurrency3.png'
-                            alt='image'
-                          />
-                          Stake Work
+                          <i className='bx bx-wallet'></i>
+                          Claim Rewards
                         </a>
                       </Link>
                     </li>
                   </ul>
+                </li>
+
+                <li className='nav-item'>
+                  <Link href='/stakework' activeClassName='active'>
+                    <a className='nav-link'>Stake Work</a>
+                  </Link>
                 </li>
               
                 <li className='nav-item megamenu support'>

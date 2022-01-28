@@ -66,7 +66,7 @@ const Admin = () => {
                   <span>Administration</span>
                 </h1>
                 <p>
-                  Set manager parameters.
+                  Set manager parameters
                 </p>
                 
               </div>

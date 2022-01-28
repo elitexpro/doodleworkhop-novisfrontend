@@ -110,7 +110,7 @@ const CreateWork = () => {
                 <h1>
                   <span>Create Work</span>
                 </h1>
-                <p>
+                {/* <p>
                   <h3 style={{ "color":"white" }}>Your Balance</h3>
                   <br/>
                   <h4 style={{ "color":"white" }}>
@@ -118,7 +118,7 @@ const CreateWork = () => {
                     {cw20Balance} CREW <br/>
                   </h4>
 
-                </p>
+                </p> */}
                 
               </div>
             </div>

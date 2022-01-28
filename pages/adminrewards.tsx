@@ -64,9 +64,7 @@ const StakeWork = () => {
 
     executeSendContract,
     getDetailsAll,
-    detailsAll,
-
-    executeRefundContract
+    detailsAll
 
   } = useSigningClient()
 
@@ -87,17 +85,14 @@ const StakeWork = () => {
   };
 
   useEffect(() => {
-    if (!signingClient || walletAddress.length === 0) {
-      setnewData(null)
+    if (!signingClient || walletAddress.length === 0) 
       return
-    }
     getDetailsAll()
   }, [signingClient, walletAddress])
 
   useEffect(() => {
-    if (detailsAll == null || detailsAll.escrows == null) {
+    if (detailsAll == null || detailsAll.escrows == null)
       return
-    }
     console.log(detailsAll.escrows)
     setnewData(detailsAll.escrows)
     setPageCount(Math.ceil(detailsAll?.escrows.length / coinsPerPage))
@@ -124,17 +119,8 @@ const StakeWork = () => {
 
   const handleStakeOpen = (row:any) => {
     setCurrentRow(row)
-    if (row.my_staked > 0) {
-      //Refund
-      executeRefundContract(row.id)
-
-    } else {
-      //Stake
-      setStartDate(new Date())
-      setEndDate(new Date())
-      setMinEndDate(new Date(row.start_time * 1000))
-      setStakeOpen(true)
-    }
+    setMinEndDate(new Date(row.start_time * 1000))
+    setStakeOpen(true)
   }
 
   const handleStakeClose = () => {
@@ -256,8 +242,7 @@ const StakeWork = () => {
         aria-describedby="parent-modal-description"
       >
         <Box sx={{ ...style, width: 800 }}>
-          {/* <h2 id="parent-modal-title">Staked Account List : {currentRow?.account_info.length} Accounts</h2> */}
-          <h2 id="parent-modal-title">My Staked Information</h2>
+          <h2 id="parent-modal-title">Staked Account List : {currentRow?.account_info.length} Accounts</h2>
           <div className='trade-cryptocurrency-box'>
 
           <table className='table'>
@@ -299,7 +284,7 @@ const StakeWork = () => {
         <div className='container'>
           <div className='section-title'>
             <h2>
-              Stake to interesting works
+              Stake to your interesting works
             </h2>
           </div>
           
@@ -326,11 +311,13 @@ const StakeWork = () => {
                 <tr>
                   <th scope='col'>Title</th>
                   <th scope='col'>Desc</th>
-                  <th scope='col'>Url</th>
                   <th scope='col'>Required Amount</th>
+                  <th scope='col'>Staked Amount</th>
                   <th scope='col'>My Staked Amount</th>
                   <th scope='col'>Staked List</th>
                   <th scope='col'>Start Time</th>
+                  <th scope='col'>Url</th>
+
                   <th scope='col'>Action</th>
                 </tr>
               </thead>
@@ -341,44 +328,47 @@ const StakeWork = () => {
                   search(newData)
                     .slice(0 || pagesVisited, pagesVisited + coinsPerPage)
                     .map((data) => (
-                      data.client == walletAddress ? <></> :
-                      <tr key={data.id} style={{ "backgroundColor" : (data.expired && data.state > 0 ? "#00FF0040" : "#FF00FF40")}}>
+                      
+                      <tr key={data.id} style={{ "backgroundColor" : (data.isWorkManager ? "#00FF0040" : "#FF00FF40")}}>
                         
                         <td>{data.work_title}</td>
                         <td>{data.work_desc}</td>
-                        <td><a href={data.work_url}>{data.work_url}</a></td>
                         <td>{data.stake_amount / CW20_DECIMAL}</td>
+                        <td>
+                          {data.cw20_balance[0]? data.cw20_balance[0].amount / CW20_DECIMAL: ""}
+                        </td>
                         <td> {data.my_staked > 0? data.my_staked / CW20_DECIMAL: ""}</td>
-			                  <td>
-                          {data.my_staked > 0 ?
+                        <td>
+                          {data.isWorkManager ?
                             <button
                               style={{"backgroundColor": "var(--bs-indigo)" }}
                               className="block default-btn w-full max-w-full truncate"
                               onClick={(e) => handleListOpen(data)}
                               >
                                 <i className="bx bx-right-arrow"></i>
-                                {data.account_info.length}&nbsp;&nbsp;View
+                                {data.account_info.length}&nbsp;&nbsp;accounts
                             </button> : <></>
                           }
                           
-                        </td>	
+                        </td>
                         <td>{moment(new Date(data.start_time * 1000)).format('YYYY/MM/DD HH:mm:ss')}</td>
-                        
+                        <td>
+                            <a href={data.work_url}>{data.work_url}</a>
+                        </td>
                         <td>
                           <button
                             className="block default-btn w-full max-w-full truncate"
                             style={{
                               "backgroundColor": (
-                                data.expired && data.state > 0 ? "var(--bs-gray)" : (data.my_staked > 0 ? "var(--bs-pink)": "")
+                                data.isWorkManager ? "var(--bs-gray)" : (data.my_stake > 0 ? "var(--bs-pink)": "")
                               ) 
                             }}
-                            disabled={data.expired && data.state > 0}
+                            disabled={data.isWorkManager || data.my_stake > 0 || data.state > 0}
                             onClick={(e) => handleStakeOpen(data)}
                             >
                                 <i className= 'bx bxs-like bx-lg'></i> 
                                 {
-                                  data.expired && data.state > 0? "Started" : 
-                                  (data.my_staked > 0 ? "Refund" : "Stake")
+                                  data.isWorkManager? "Cant Stake" : ((data.expired && data.state == 1) ? "Started" : (data.my_stake > 0 ? "Staked" : "Stake"))
                                 }
                           </button>
                         </td>

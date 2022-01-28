@@ -41,7 +41,10 @@ export interface ISigningCosmWasmClientContext {
   executeSendContract: Function,
 
   getDetailsAll: Function,
-  detailsAll: any
+  detailsAll: any,
+
+  executeApproveContract: Function,
+  executeRefundContract: Function
 
 
 }
@@ -69,7 +72,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
   const [isAdmin, setIsAdmin] = useState(false)
 
   const [managerAddr, setManagerAddr] = useState('')
-  const [minStake, setMinStake] = useState(10)
+  const [minStake, setMinStake] = useState(0.01)
   const [rateClient, setRateClient] = useState(10)
   const [rateManager, setRateManager] = useState(10)
 
@@ -158,7 +161,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
       NotificationManager.info(`Successfully got balances`)
     } catch (error) {
       setLoading(false)
-      NotificationManager.warn(`GetBalances error : ${error}`)
+      NotificationManager.error(`GetBalances error : ${error}`)
     }
   }
 
@@ -167,14 +170,14 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
     setLoading(true)
     try {
       const response:JsonObject = await signingClient.queryContractSmart(PUBLIC_TOKEN_ESCROW_CONTRACT, {
-        is_admin: {addr:`${walletAddress}`}
+        is_admin: {addr:walletAddress}
       })
       setIsAdmin(response.isadmin)
       setLoading(false)      
       NotificationManager.info(`Successfully got isAdmin`)
     } catch (error) {
       setLoading(false)
-      NotificationManager.warn(`GetIsAdmin error : ${error}`)
+      NotificationManager.error(`GetIsAdmin error : ${error}`)
     }
   }
 
@@ -190,6 +193,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
       const response:JsonObject = await signingClient.queryContractSmart(PUBLIC_TOKEN_ESCROW_CONTRACT, {
         constants: {}
       })
+      console.log(response)
       setManagerAddr(response.manager_addr)
       setMinStake(response.min_stake)
       setRateClient(response.rate_client)
@@ -199,7 +203,8 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
       NotificationManager.success(`Successfully got manager constants`)
     } catch (error) {
       setLoading(false)
-      NotificationManager.warn(`GetManagerConstants Error : ${error}`)
+      NotificationManager.error(`GetManagerConstants Error : ${error}`)
+      console.log(error)
     }
   }
 
@@ -229,7 +234,6 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
       NotificationManager.success('Successfully set manager constants')
     } catch (error) {
       setLoading(false)
-      getBalances()
       NotificationManager.error(`SetManagerConstants error : ${error}`)
     }
   }
@@ -264,6 +268,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
       )
       setLoading(false)
       getBalances()
+      getDetailsAll()
       NotificationManager.success('Successfully executed')
     } catch (error) {
       setLoading(false)
@@ -274,7 +279,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
 
   ////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////
-  ///////////////    Accounts Stake Token   //////////////////////////////
+  ///////////////    Get Staked Full Info   //////////////////////////////
   ////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////
   
@@ -282,14 +287,111 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
     setLoading(true)
     try {
       const response:JsonObject = await signingClient.queryContractSmart(PUBLIC_TOKEN_ESCROW_CONTRACT, {
-        details_all: {}
+        details_all: {addr:walletAddress}
       })
-      setDetailsAll(response)
+      let tempstr:string = "";
+      
+      console.log(response)
+      response.escrows.map((data) => {
+
+        tempstr = data.account_info;
+        let accountList:Array<JsonObject> = [];
+        if (tempstr.length > 0) {
+          tempstr = tempstr.substring(1)
+          tempstr.split(";").map((rec) => {
+            let arr = rec.split(":")
+            let account_info:JsonObject = {"addr": arr[0], "amount":arr[1], "start_time":arr[2], "end_time":arr[3]}
+            accountList.push(account_info)
+          })
+        }
+        data.account_info = accountList
+        data.isWorkManager = (data.client == walletAddress || isAdmin)
+        //data.state
+        // 0: canStake
+        // 1: Started ( but only can show when expired)
+        // 2: Client rewarded
+        // 3: manager rewarded
+        
+
+      })
       setLoading(false)
+      setDetailsAll(response)
+      
       NotificationManager.success('Successfully got DetailsAll')
     } catch (error) {
       setLoading(false)
-      NotificationManager.warn(`GetManagerConstants Error : ${error}`)
+      NotificationManager.error(`GetDetailsAll Error : ${error}`)
+      console.log(error)
+    }
+  }
+
+  ////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////
+  ///////    Approve or Refund CREW Token from Escrow Contract   /////////
+  ////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////
+
+  const executeApproveContract = async (id:string) => {
+ 
+    setLoading(true)
+    try {
+      
+      await signingClient.execute(
+        walletAddress, // sender address
+        PUBLIC_TOKEN_ESCROW_CONTRACT, // token escrow contract
+        { 
+          "approve":
+          {
+            "id":`${id}`
+          }
+        }, // msg
+        defaultFee,
+        undefined,
+        []
+      )
+
+      setLoading(false)
+      getDetailsAll()
+      getBalances()
+      NotificationManager.success('Successfully approved')
+    } catch (error) {
+      setLoading(false)
+      getBalances()
+      NotificationManager.error(`Approve error : ${error}`)
+    
+    }
+  }
+
+  const executeRefundContract = async (id:string) => {
+ 
+    setLoading(true)
+    try {
+      
+      await signingClient.execute(
+        walletAddress, // sender address
+        PUBLIC_TOKEN_ESCROW_CONTRACT, // token escrow contract
+        { 
+          "refund":
+          {
+            "id":`${id}`
+          }
+        }, // msg
+        defaultFee,
+        undefined,
+        []
+      )
+
+      setLoading(false)
+      getDetailsAll()
+      getBalances()
+      NotificationManager.success('Successfully refunded')
+    } catch (error) {
+      setLoading(false)
+      getBalances()
+      if (error.message.indexOf("Still in your staking expired") < 0)
+        NotificationManager.error(`Refund error : ${error.message}`)
+      else
+        NotificationManager.warning("Still in your staking period")
     }
   }
 
@@ -323,7 +425,10 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
 
     executeSendContract,
     getDetailsAll,
-    detailsAll
+    detailsAll,
+
+    executeApproveContract,
+    executeRefundContract
 
   }
 }
