@@ -62,7 +62,7 @@ const Footer = () => {
                 <ul className='footer-contact-info'>
                   <li>Graz, Austria</li>
                   <li>
-                    Email: <a href='phantomtop0127@gmail.com'>phantomtop0127@gamil.com</a>
+                    Email: <a href='phantomtop0127@gmail.com'>phantomtop0127@gmail.com</a>
                   </li>
                   {/* <li>
                     Phone: <a href='tel:+44587154756'>+1234-567-8901</a>

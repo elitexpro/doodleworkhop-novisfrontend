@@ -184,7 +184,7 @@ const StakeWork = () => {
         <div className='container'>
           <div className='section-title'>
             <h2>
-              Get reward from started works
+              Get reward from my works
             </h2>
           </div>
           
@@ -225,7 +225,7 @@ const StakeWork = () => {
                   search(newData)
                     .slice(0 || pagesVisited, pagesVisited + coinsPerPage)
                     .map((data) => (
-                      !(data.client == walletAddress && data.expired && data.state > 0) ? <></> :
+                      !(data.client == walletAddress ) ? <></> :
                       <tr key={data.id} style={{ "backgroundColor" : (data.state == 1 ? "#00FF0040" : "#FF00FF40")}}>
                         
                         <td>{data.work_title}</td>
@@ -252,15 +252,15 @@ const StakeWork = () => {
                             className="block default-btn w-full max-w-full truncate"
                             style={{
                               "backgroundColor": (
-                                data.state > 1 ? "var(--bs-gray)" : ""
+                                data.state == 1 && data.expired ? "" : "var(--bs-gray)"
                               ) 
                             }}
-                            disabled={data.state > 1}
+                            disabled={data.state < 1}
                             onClick={(e) => handleReward(data)}
                             >
                                 <i className= 'bx bxs-like bx-lg'></i> 
                                 {
-                                  data.state > 1? "Done" : "Reward"
+                                  data.state > 0 && data.expired  ? (data.state == 1 ? "Reward" : "Done") : "Notyet"
                                 }
                           </button>
                         </td>
