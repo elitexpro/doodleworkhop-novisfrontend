@@ -160,6 +160,11 @@ const StakeWork = () => {
       return
     }
 
+    if (endDate < minEndDate) {
+      NotificationManager.error(`End date must be later than work's start date.`)
+      return
+    }
+
     event.preventDefault()
 
     let start_time = 0

@@ -389,7 +389,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
     } catch (error) {
       setLoading(false)
       getBalances()
-      if (error.message.indexOf("Still in your staking expired") < 0)
+      if (error.message.indexOf("Still in your staking period") < 0)
         NotificationManager.error(`Refund error : ${error}`)
       else
         NotificationManager.warning("Still in your staking period")

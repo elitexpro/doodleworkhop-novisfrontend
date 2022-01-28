@@ -42,16 +42,16 @@ const Footer = () => {
                 <h3>Steps</h3>
                 <ul className='quick-links'>
                   <li>
-                    <Link href='/trade'>Wallet</Link>
+                    <Link href='/wallet'>Wallet</Link>
                   </li>
                   <li>
-                    <Link href='/guides'>Create</Link>
+                    <Link href='/creatework'>Create</Link>
                   </li>
                   <li>
-                    <Link href='/wallet'>Stake</Link>
+                    <Link href='/stakework'>Stake</Link>
                   </li>
                   <li>
-                    <Link href='/faq'>FAQ</Link>
+                    <Link href='/clientrewards'>Reward</Link>
                   </li>
                 </ul>
               </div>
@@ -62,14 +62,14 @@ const Footer = () => {
                 <ul className='footer-contact-info'>
                   <li>Graz, Austria</li>
                   <li>
-                    Email: <a href='mailto:hello@Novis.com'>simonrose@gamil.com</a>
+                    Email: <a href='phantomtop0127@gmail.com'>phantomtop0127@gamil.com</a>
                   </li>
-                  <li>
+                  {/* <li>
                     Phone: <a href='tel:+44587154756'>+1234-567-8901</a>
                   </li>
                   <li>
                     Fax: <a href='tel:+44587154756'>+1234-567-8901</a>
-                  </li>
+                  </li> */}
                 </ul>
               </div>
             </div>

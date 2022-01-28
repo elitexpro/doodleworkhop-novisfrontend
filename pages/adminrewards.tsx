@@ -8,6 +8,11 @@ import Button from '@mui/material/Button'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import DateTimePicker from '@mui/lab/DateTimePicker'
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 import axios from 'axios';
 import Link from 'next/link';
@@ -116,7 +121,8 @@ const StakeWork = () => {
       ));
   };
 
-  const [listOpen, setListOpen] = useState(false);
+  const [listOpen, setListOpen] = useState(false)
+  const [open, setOpen] = useState(false)
   const [currentRow, setCurrentRow] = useState(null)
 
   
@@ -126,9 +132,9 @@ const StakeWork = () => {
   }
   
   const handleRemove = (row:any) => {
-    
+
     setCurrentRow(row)
-    executeRemoveContract(row.id)
+    setOpen(true)
   }
 
   const handleListOpen = (row:any) => {
@@ -140,8 +146,44 @@ const StakeWork = () => {
     setListOpen(false)
   };
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (flag:any) => {
+    setOpen(false)
+  };
+
+  const handleConfirmClose = (flag:any) => {
+    
+    setOpen(false)
+    executeRemoveContract(currentRow.id)
+  };
+
   return (
     <>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Really want to remove work?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Though you got reward, other accounts would still using this work. 
+            Removing this will negatively affect the reputation of your site.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Disagree</Button>
+          <Button onClick={handleConfirmClose} autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Modal
         open={listOpen}
         onClose={handleListClose}
@@ -150,7 +192,7 @@ const StakeWork = () => {
       >
         <Box sx={{ ...style, width: 800 }}>
           {/* <h2 id="parent-modal-title">Staked Account List : {currentRow?.account_info.length} Accounts</h2> */}
-          <h2 id="parent-modal-title">My Staked Information</h2>
+          <h2 id="parent-modal-title">Staked Account List</h2>
           <div className='trade-cryptocurrency-box'>
 
           <table className='table'>

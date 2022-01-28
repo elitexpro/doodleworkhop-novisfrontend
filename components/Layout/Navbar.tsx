@@ -205,25 +205,25 @@ const Navbar = () => {
               </ul>
               <div className='others-option'>
                 <div className='d-flex align-items-center'>
-                    {walletAddress.length == 0 ?<></>:
-                        <div className='banner-wrapper-content'>
-                            <span className="sub-title ms-2" style={{"marginBottom":"0px", "fontSize":"16px"}}>
-                            {nativeBalance} JUNO 
-                            </span>
-                            <span className="sub-title ms-2" style={{"marginBottom":"0px", "fontSize":"16px", "backgroundColor": "var(--bs-pink)" }}>
-                            {cw20Balance} CREW
-                            </span>
-                        </div>
-                    }
-                    <i className= { loading ? 'bx bx-loader bx-spin bx-md' : '' }></i> 
-                    <div className="flex flex-grow lg:flex-grow-0 max-w-full ms-2">
-                        <button
-                        className="block default-btn w-full max-w-full truncate"
-                        onClick={handleConnect}
-                        >
-                            <i className= 'bx bxs-contact'></i> 
-                            {walletAddress ? walletAddress.substring(0,12) + "..." + walletAddress.substring(walletAddress.length - 6, walletAddress.length) :'Connect Wallet'}
-                        </button>
+                  {walletAddress.length == 0 ?<></>:
+                      <div className='banner-wrapper-content'>
+                          <span className="sub-title ms-2" style={{"marginBottom":"0px", "fontSize":"16px"}}>
+                          {nativeBalance} JUNO 
+                          </span>
+                          <span className="sub-title ms-2" style={{"marginBottom":"0px", "fontSize":"16px", "backgroundColor": "var(--bs-pink)" }}>
+                          {cw20Balance} CREW
+                          </span>
+                      </div>
+                  }
+                  <i className= { loading ? 'bx bx-loader bx-spin bx-md' : '' }></i> 
+                  <div className="flex flex-grow lg:flex-grow-0 max-w-full ms-2">
+                      <button
+                      className="block default-btn w-full max-w-full truncate"
+                      onClick={handleConnect}
+                      >
+                          <i className= 'bx bxs-contact'></i> 
+                          {walletAddress ? walletAddress.substring(0,12) + "..." + walletAddress.substring(walletAddress.length - 6, walletAddress.length) :'Connect Wallet'}
+                      </button>
                   </div>
                   <div className='option-item'>
                     {walletAddress.length == 0 ? 
