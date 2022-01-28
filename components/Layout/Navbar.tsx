@@ -107,7 +107,7 @@ const Navbar = () => {
               
               <ul className='navbar-nav'>
                 {!isAdmin ? <></>:
-                  <li className='nav-item '>
+                  <li className='nav-item megamenu support'>
                     <Link href='#' activeClassName='active'>
                       <a className='dropdown-toggle nav-link'>Admin</a>
                     </Link>
@@ -115,14 +115,16 @@ const Navbar = () => {
                       <li className='nav-item'>
                         <Link href='/adminconstants'>
                           <a className='nav-link'>
-                            Constants
+                            <i className='bx bx-info-circle'></i>
+                            Constant
                           </a>
                         </Link>
                       </li>
                       <li className='nav-item'>
                         <Link href='/adminrewards'>
                           <a className='nav-link'>
-                            Rewards
+                            <i className='bx bx-wallet'></i>
+                            Reward
                           </a>
                         </Link>
                       </li>
@@ -139,7 +141,7 @@ const Navbar = () => {
                       <Link href='/creatework'>
                         <a className='nav-link'>
                           <i className='bx bx-info-circle'></i>
-                          Create Work
+                          Create
                         </a>
                       </Link>
                       
@@ -148,7 +150,7 @@ const Navbar = () => {
                       <Link href='/clientrewards'>
                         <a className='nav-link'>
                           <i className='bx bx-wallet'></i>
-                          Claim Rewards
+                          Reward
                         </a>
                       </Link>
                     </li>

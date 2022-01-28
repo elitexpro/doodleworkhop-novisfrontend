@@ -8,6 +8,7 @@ import '../public/css/fontawesome.min.css';
 import '../public/css/meanmenu.min.css';
 import '../public/css/style.css';
 import '../public/css/responsive.css';
+import '../public/css/custom.css';
 
 import Layout from '../components/Layout/Layout';
 import GoTop from '../components/Shared/GoTop';

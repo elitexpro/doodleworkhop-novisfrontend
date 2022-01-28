@@ -41,7 +41,8 @@ let { Provider } = (CosmWasmContext =
     detailsAll: null,
 
     executeApproveContract:() => {},
-    executeRefundContract:() => {}
+    executeRefundContract:() => {},
+    executeRemoveContract:() => {}
   }))
 
 export const useSigningClient = (): ISigningCosmWasmClientContext =>

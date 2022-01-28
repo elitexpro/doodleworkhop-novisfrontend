@@ -98,7 +98,6 @@ const StakeWork = () => {
     if (detailsAll == null || detailsAll.escrows == null) {
       return
     }
-    console.log(detailsAll.escrows)
     setnewData(detailsAll.escrows)
     setPageCount(Math.ceil(detailsAll?.escrows.length / coinsPerPage))
 

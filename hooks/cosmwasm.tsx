@@ -44,7 +44,8 @@ export interface ISigningCosmWasmClientContext {
   detailsAll: any,
 
   executeApproveContract: Function,
-  executeRefundContract: Function
+  executeRefundContract: Function,
+  executeRemoveContract: Function
 
 
 }
@@ -389,12 +390,43 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
       setLoading(false)
       getBalances()
       if (error.message.indexOf("Still in your staking expired") < 0)
-        NotificationManager.error(`Refund error : ${error.message}`)
+        NotificationManager.error(`Refund error : ${error}`)
       else
         NotificationManager.warning("Still in your staking period")
     }
   }
 
+  const executeRemoveContract = async (id:string) => {
+ 
+    setLoading(true)
+    try {
+      
+      await signingClient.execute(
+        walletAddress, // sender address
+        PUBLIC_TOKEN_ESCROW_CONTRACT, // token escrow contract
+        { 
+          "remove":
+          {
+            "id":`${id}`
+          }
+        }, // msg
+        defaultFee,
+        undefined,
+        []
+      )
+
+      setLoading(false)
+      getDetailsAll()
+      getBalances()
+      NotificationManager.success('Successfully removed')
+    } catch (error) {
+      setLoading(false)
+      getBalances()
+      NotificationManager.error(`Remove error : ${error}`)
+    }
+  }
+
+  
 
   return {
     walletAddress,
@@ -428,7 +460,8 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
     detailsAll,
 
     executeApproveContract,
-    executeRefundContract
+    executeRefundContract,
+    executeRemoveContract
 
   }
 }
