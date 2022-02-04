@@ -8,6 +8,7 @@ import {
   convertFromMicroDenom
 } from '../util/conversion'
 import {NotificationContainer, NotificationManager} from 'react-notifications'
+import { create } from 'ipfs-http-client'
 
 export interface ISigningCosmWasmClientContext {
   walletAddress: string
@@ -15,7 +16,7 @@ export interface ISigningCosmWasmClientContext {
   signingClient: SigningCosmWasmClient | null
   loading: boolean
   error: any
-  connectWallet: any
+  connectWallet: Function,
   disconnect: Function,
 
   getIsAdmin: Function,
@@ -45,7 +46,9 @@ export interface ISigningCosmWasmClientContext {
 
   executeApproveContract: Function,
   executeRefundContract: Function,
-  executeRemoveContract: Function
+  executeRemoveContract: Function,
+
+  executeUploadImage: Function
 
 
 }
@@ -55,6 +58,7 @@ export const PUBLIC_CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID || ''
 export const PUBLIC_STAKING_DENOM = process.env.NEXT_PUBLIC_STAKING_DENOM || 'ujuno'
 export const PUBLIC_TOKEN_ESCROW_CONTRACT = process.env.NEXT_PUBLIC_TOKEN_ESCROW_CONTRACT || ''
 export const PUBLIC_CW20_CONTRACT = process.env.NEXT_PUBLIC_CW20_CONTRACT || ''
+const IPFS_URL = 'https://ipfs.infura.io/ipfs/'
 
 export const defaultFee = {
   amount: [],
@@ -62,6 +66,7 @@ export const defaultFee = {
 }
 
 export const CW20_DECIMAL = 1000
+
 
 export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
   const [client, setClient] = useState<CosmWasmClient | null>(null)
@@ -90,9 +95,11 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
   ////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////
 
+  const showNotification = false;
 
-  const connectWallet = async () => {
-    setLoading(true)
+  const connectWallet = async (inBackground:boolean) => {
+    if (!inBackground)
+      setLoading(true)
 
     try {
       await connectKeplr()
@@ -122,17 +129,24 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
       const [{ address }] = await offlineSigner.getAccounts()
       setWalletAddress(address)
 
-      setLoading(false)
-      NotificationManager.success(`Connected successfully`)
+      localStorage.setItem("address", address)
+      if (!inBackground) {
+        setLoading(false)
+        NotificationManager.success(`Connected successfully`)
+      }
     } catch (error) {
       NotificationManager.error(`ConnectWallet error : ${error}`)
-      setLoading(false)
+      if (!inBackground) {
+        setLoading(false)
+      }
     }
   }
 
   const disconnect = () => {
     if (signingClient) {
+      localStorage.removeItem("address")
       signingClient.disconnect()
+      
     }
     setIsAdmin(false)
     setWalletAddress('')
@@ -159,10 +173,12 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
       })
       setCw20Balance(parseInt(objectCrew.balance) / CW20_DECIMAL)
       setLoading(false)
-      NotificationManager.info(`Successfully got balances`)
+      if (showNotification)
+        NotificationManager.info(`Successfully got balances`)
     } catch (error) {
       setLoading(false)
-      NotificationManager.error(`GetBalances error : ${error}`)
+      if (showNotification)
+        NotificationManager.error(`GetBalances error : ${error}`)
     }
   }
 
@@ -174,11 +190,13 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
         is_admin: {addr:walletAddress}
       })
       setIsAdmin(response.isadmin)
-      setLoading(false)      
-      NotificationManager.info(`Successfully got isAdmin`)
+      setLoading(false)   
+      if (showNotification)
+        NotificationManager.info(`Successfully got isAdmin`)
     } catch (error) {
       setLoading(false)
-      NotificationManager.error(`GetIsAdmin error : ${error}`)
+      if (showNotification)
+        NotificationManager.error(`GetIsAdmin error : ${error}`)
     }
   }
 
@@ -200,11 +218,13 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
       setRateClient(response.rate_client)
       setRateManager(response.rate_manager)
 
-      setLoading(false)      
-      NotificationManager.success(`Successfully got manager constants`)
+      setLoading(false)   
+      if (showNotification)
+        NotificationManager.success(`Successfully got manager constants`)
     } catch (error) {
       setLoading(false)
-      NotificationManager.error(`GetManagerConstants Error : ${error}`)
+      if (showNotification)
+        NotificationManager.error(`GetManagerConstants Error : ${error}`)
       console.log(error)
     }
   }
@@ -232,10 +252,12 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
 
       setLoading(false)
       getBalances()
-      NotificationManager.success('Successfully set manager constants')
+      if (showNotification)
+        NotificationManager.success('Successfully set manager constants')
     } catch (error) {
       setLoading(false)
-      NotificationManager.error(`SetManagerConstants error : ${error}`)
+      if (showNotification)
+        NotificationManager.error(`SetManagerConstants error : ${error}`)
     }
   }
 
@@ -317,11 +339,12 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
       })
       setLoading(false)
       setDetailsAll(response)
-      
-      NotificationManager.success('Successfully got DetailsAll')
+      if (showNotification)
+        NotificationManager.success('Successfully got DetailsAll')
     } catch (error) {
       setLoading(false)
-      NotificationManager.error(`GetDetailsAll Error : ${error}`)
+      if (showNotification)
+        NotificationManager.error(`GetDetailsAll Error : ${error}`)
       console.log(error)
     }
   }
@@ -427,6 +450,28 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
   }
 
   
+  const executeUploadImage = async (file) => {
+    console.log("Upload start " + file.toString())
+    setLoading(true)
+    const client = create({ url: 'https://ipfs.infura.io:5001/api/v0' })
+    try {
+      const image_hash = await client.add(file)
+      // const metadata = JSON.stringify({
+      //   name: file.toString(),
+      //   description: file.toString(),
+      //   image: IPFS_URL + image_hash.cid.toString()
+      // })
+      // const meta_hash = await client.add(metadata)
+      // console.log("meta_hash : " + meta_hash)
+      console.log("url : " + IPFS_URL + image_hash.cid.toString())
+      setLoading(false)
+      return IPFS_URL + image_hash.cid.toString()
+    } catch (error) {
+      NotificationManager.error(`Upload image error : ${error}`)
+      setLoading(false)
+    }
+  }
+  
 
   return {
     walletAddress,
@@ -461,7 +506,9 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
 
     executeApproveContract,
     executeRefundContract,
-    executeRemoveContract
+    executeRemoveContract,
+
+    executeUploadImage
 
   }
 }

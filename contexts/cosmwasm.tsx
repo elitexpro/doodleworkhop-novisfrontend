@@ -12,7 +12,7 @@ let { Provider } = (CosmWasmContext =
     signingClient: null,
     loading: false,
     error: null,
-    connectWallet: () => {},
+    connectWallet: (inBackground:boolean) => {},
     disconnect: () => {},
 
     getIsAdmin: () => {},
@@ -42,7 +42,9 @@ let { Provider } = (CosmWasmContext =
 
     executeApproveContract:() => {},
     executeRefundContract:() => {},
-    executeRemoveContract:() => {}
+    executeRemoveContract:() => {},
+    
+    executeUploadImage:(file:Object) => {}
   }))
 
 export const useSigningClient = (): ISigningCosmWasmClientContext =>

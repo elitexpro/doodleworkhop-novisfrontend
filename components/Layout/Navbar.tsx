@@ -22,11 +22,18 @@ const Navbar = () => {
 
   const handleConnect = () => {
     if (walletAddress.length === 0) {
-      connectWallet()
+      connectWallet(false)
     } else {
       disconnect()
     }
   }
+
+  useEffect(() => {
+    let account = localStorage.getItem("address")
+    if (account != null) {
+      connectWallet(true)
+    }
+  }, [])
 
   useEffect(() => {
     if (!signingClient || walletAddress.length === 0)
