@@ -346,6 +346,7 @@ const StakeWork = () => {
               
               <Select options={options} className="col-md-9"
               onChange={handleOptionChange}
+              defaultValue={{ label: "All", value: 0 }}
               />
             </div>
           </div>
