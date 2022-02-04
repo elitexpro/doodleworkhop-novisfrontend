@@ -19,6 +19,13 @@ import moment from 'moment'
 import { useSigningClient } from '../contexts/cosmwasm'
 import { fromBase64, toBase64 } from '@cosmjs/encoding'
 import { CW20_DECIMAL } from '../hooks/cosmwasm'
+import Select from 'react-select'
+
+const options = [
+  { value: 0, label: 'All' },
+  { value: 1, label: 'Started' },
+  { value: 2, label: 'Not Started' }
+]
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -107,9 +114,10 @@ const StakeWork = () => {
   const search = (rows) => {
     return rows.filter((row) => 
     (
-      row.work_title.toLowerCase().indexOf(q.toLocaleLowerCase()) > -1 || 
+      (row.work_title.toLowerCase().indexOf(q.toLocaleLowerCase()) > -1 || 
       row.work_desc.toLowerCase().indexOf(q.toLocaleLowerCase()) > -1 ||
-      row.work_url.toLowerCase().indexOf(q.toLocaleLowerCase()) > -1 
+      row.work_url.toLowerCase().indexOf(q.toLocaleLowerCase()) > -1 ) &&
+      (currentOption == 0 ? true : currentOption == 1 ? (row.expired && row.state > 0 ): !(row.expired && row.state > 0 ))
       ));
   };
 
@@ -120,6 +128,7 @@ const StakeWork = () => {
   const [minEndDate, setMinEndDate] = useState<Date | null>(new Date())
   const [stakeAmount, setStakeAmount] = useState(0)
   const [currentRow, setCurrentRow] = useState(null)
+  const [currentOption, setCurrentOption] = useState(0)
 
   const handleStakeOpen = (row:any) => {
     setCurrentRow(row)
@@ -185,6 +194,14 @@ const StakeWork = () => {
     executeSendContract(plainMsg, stakeAmount)
     setStakeOpen(false);
   }
+
+  const handleOptionChange = (selectedOption) => {
+    console.log(selectedOption)
+    // this.setState({ selectedOption }, () =>
+    //   console.log(`Option selected:`, this.state.selectedOption)
+    // );
+    setCurrentOption(selectedOption.value)
+  };
 
 
   return (
@@ -314,61 +331,55 @@ const StakeWork = () => {
           <div className='price-filter'>
             
 
-            <div className='col-md-3'>
-              Search:{' '}
+            <div className='col-md-3 d-flex align-items-center'>
+              <span className="col-md-3">Search:{' '}</span>
               <input
                 type='text'
-                className='crypto-search'
+                className='crypto-search col-md-9'
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
               />
             </div>
+
+            <div className='col-md-3 row d-flex align-items-center'>
+              <span className="col-md-3">View:{' '}</span>
+              
+              <Select options={options} className="col-md-9"
+              onChange={handleOptionChange}
+              />
+            </div>
           </div>
           <div className='cryptocurrency-table table-responsive'>
-            <table className='table'>
-              <thead>
-                <tr>
-                  <th scope='col'>Title</th>
-                  <th scope='col'>Desc</th>
-                  <th scope='col'>Url</th>
-                  <th scope='col'>Required Amount</th>
-                  <th scope='col'>My Staked Amount</th>
-                  <th scope='col'>Staked List</th>
-                  <th scope='col'>Start Time</th>
-                  <th scope='col'>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {/* slice(0, parseInt(value)) */}
-                {newData &&
-                  newData.length > 0 &&
-                  search(newData)
-                    .slice(0 || pagesVisited, pagesVisited + coinsPerPage)
-                    .map((data) => (
-                      data.client == walletAddress ? <></> :
-                      <tr key={data.id} style={{ "backgroundColor" : (data.expired && data.state > 0 ? "#00FF0040" : "#FF00FF40")}}>
-                        
-                        <td>{data.work_title}</td>
-                        <td>{data.work_desc}</td>
-                        <td><a href={data.work_url}>{data.work_url}</a></td>
-                        <td>{data.stake_amount / CW20_DECIMAL}</td>
-                        <td> {data.my_staked > 0? data.my_staked / CW20_DECIMAL: ""}</td>
-			                  <td>
-                          {data.my_staked > 0 ?
-                            <button
-                              style={{"backgroundColor": "var(--bs-indigo)" }}
-                              className="block default-btn w-full max-w-full truncate"
-                              onClick={(e) => handleListOpen(data)}
-                              >
-                                <i className="bx bx-right-arrow"></i>
-                                {data.account_info.length}&nbsp;&nbsp;View
-                            </button> : <></>
-                          }
-                          
-                        </td>	
-                        <td>{moment(new Date(data.start_time * 1000)).format('YYYY/MM/DD HH:mm:ss')}</td>
-                        
-                        <td>
+
+            <div className='row align-items-center justify-content-center'>
+
+
+              {newData &&
+                newData.length > 0 &&
+                search(newData)
+                  .slice(0 || pagesVisited, pagesVisited + coinsPerPage)
+                  .map((data) => (
+                    data.client == walletAddress ? <></> :
+                    <>
+                    <div className='col-lg-3 col-md-4 col-sm-4'>
+                      <div className='single-features-box'>
+                        <img src={data.image_url} alt='image' />
+                        <h2>{data.work_title}</h2>
+                        <h3>{data.work_desc}</h3>
+                        <h4><a href={data.work_url}>{data.work_url}</a></h4>
+                        <td> {data.my_staked > 0? "My staked : " + data.my_staked / CW20_DECIMAL: ""}</td>
+                        {data.my_staked > 0 ?
+                          <button
+                            style={{"backgroundColor": "var(--bs-indigo)" }}
+                            className="block default-btn w-full max-w-full truncate"
+                            onClick={(e) => handleListOpen(data)}
+                            >
+                              <i className="bx bx-right-arrow"></i>
+                              {data.account_info.length}&nbsp;&nbsp;View
+                          </button> : <></>
+                        }
+                        <h5>Starts on {moment(new Date(data.start_time * 1000)).format('YYYY/MM/DD HH:mm:ss')}</h5>
+                        <span>
                           <button
                             className="block default-btn w-full max-w-full truncate"
                             style={{
@@ -385,15 +396,19 @@ const StakeWork = () => {
                                   (data.my_staked > 0 ? "Refund" : "Stake")
                                 }
                           </button>
-                        </td>
-                      </tr>
-                    ))}
-              </tbody>
-            </table>
+                        </span>
+                        
+                      </div>
+                    </div>
+                    </>
+                  ))}
+
+            </div>
+            
 
             <div className='count-pagination'>
               <p className='price-count'>
-                Showing 1 to 20 of {newData?.length} entries
+                {/* Showing 1 to 20 of {newData?.length} entries */}
               </p>
 
               <div className='pagination'>
