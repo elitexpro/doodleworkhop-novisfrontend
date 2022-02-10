@@ -364,7 +364,7 @@ const StakeWork = () => {
                     <>
                     <div className='col-lg-3 col-md-4 col-sm-4'>
                       <div className='single-features-box'>
-                        <img src={data.image_url} alt='image' />
+                        <img src={data.image_url} alt='image' style={{ "height":"200px" }}/>
                         <h2>{data.work_title}</h2>
                         <h3>{data.work_desc}</h3>
                         <h4><a href={data.work_url}>{data.work_url}</a></h4>
