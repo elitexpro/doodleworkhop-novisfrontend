@@ -10,4 +10,5 @@ https://drive.google.com/file/d/1mkMjkNPg3RMDL04FBjpw4F9BMRV8MV6n/view?usp=shari
 
 My telegram id is @CryptooPegasus.I have to know your id as I have other friends on Telegram.If you send me your id, I will introduce you to them.Best...
 
+And someone would call you on sweetdream mail, for frontend job. He says Joni introduced you.
 ***************When read, remove this content.*********
