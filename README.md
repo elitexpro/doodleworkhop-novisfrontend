@@ -1,14 +1,1 @@
-Balam is my secondary mail, not send. Just send phantomtop0127@gmail.com
-I received your job request.In fact, your resume and cv is too poor and complex to read.
-I think you have to change the style as the template I am sending.However, I will put you some frontend task or introduce you to other clients if possible.
-For more information about your resume reference, visit the following sites.
-https://laborx.com/freelancers/users/id47113
-
-https://docs.google.com/document/d/13dq6fH91W3dP3qhqZhl18fxOzexPVETkmn8lPV0F-zo/edit?usp=sharing
-
-https://drive.google.com/file/d/1mkMjkNPg3RMDL04FBjpw4F9BMRV8MV6n/view?usp=sharing
-
-My telegram id is @CryptooPegasus.I have to know your id as I have other friends on Telegram.If you send me your id, I will introduce you to them.Best...
-
-And someone would call you on sweetdream mail, for frontend job. He says Joni introduced you.
-***************When read, remove this content.*********
+Thanks for your message. I am not sure where I can build my resume with style you posted, but definitely yeah, I guess its more attractive to clients. Would you let me know about url I can build resume on?
