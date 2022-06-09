@@ -78,7 +78,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
   const [isAdmin, setIsAdmin] = useState(false)
 
   const [managerAddr, setManagerAddr] = useState('')
-  const [minStake, setMinStake] = useState(0.01)
+  const [minStake, setMinStake] = useState(10)
   const [rateClient, setRateClient] = useState(10)
   const [rateManager, setRateManager] = useState(10)
 
