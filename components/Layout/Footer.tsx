@@ -61,15 +61,7 @@ const Footer = () => {
                 <h3>Contact Info</h3>
                 <ul className='footer-contact-info'>
                   <li>Graz, Austria</li>
-                  <li>
-                    Email: <a href='phantomtop0127@gmail.com'>phantomtop0127@gmail.com</a>
-                  </li>
-                  {/* <li>
-                    Phone: <a href='tel:+44587154756'>+1234-567-8901</a>
-                  </li>
-                  <li>
-                    Fax: <a href='tel:+44587154756'>+1234-567-8901</a>
-                  </li> */}
+                  
                 </ul>
               </div>
             </div>
@@ -80,7 +72,7 @@ const Footer = () => {
             <p>
               Copyright 2022 <strong>DoodleWorkshop</strong>. All Rights Reserved by{' '}
               <Link href='#'>
-                <a target='_blank'>Achilles</a>
+                <a target='_blank'>Doodle</a>
               </Link>
             </p>
           </div>
