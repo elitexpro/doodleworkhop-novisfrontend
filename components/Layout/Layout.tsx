@@ -24,18 +24,18 @@ const Layout = ({ children }) => {
         />
         <meta
           name='description'
-          content='Ribnic - Muli-Niche eCommerce React Template'
+          content='Doodle Workshop'
         />
         <meta
           name='og:title'
           property='og:title'
-          content='Ribnic - Muli-Niche eCommerce React Template'
+          content='Doodle Workshop'
         ></meta>
         <meta
           name='twitter:card'
-          content='Ribnic - Muli-Niche eCommerce React Template'
+          content='Doodle Workshop'
         ></meta>
-        <link rel='canonical' href='https://novis-react.envytheme.com'></link>
+        
       </Head>
 
       {/* {pathname === '/' ? <TopHeader /> : ''} */}
