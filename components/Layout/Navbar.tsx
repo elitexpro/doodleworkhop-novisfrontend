@@ -140,6 +140,12 @@ const Navbar = () => {
                 }
                 
                 <li className='nav-item megamenu support'>
+                  <Link href='https://fortis-airdrop.web.app/' activeClassName='active'>
+                    <a target="_blank" className='nav-link'>Buy Crew</a>
+                  </Link>
+                  
+                </li>
+                <li className='nav-item megamenu support'>
                   <Link href='#' activeClassName='active'>
                     <a className='dropdown-toggle nav-link'>My Works</a>
                   </Link>
@@ -169,46 +175,14 @@ const Navbar = () => {
                     <a className='nav-link'>Stake Work</a>
                   </Link>
                 </li>
-              
-                <li className='nav-item megamenu support'>
-                  <Link href='/faq' activeClassName='active'>
-                    <a className='dropdown-toggle nav-link'>Support</a>
+
+                <li className='nav-item'>
+                  <Link href='/swap' activeClassName='active'>
+                    <a className='nav-link'>Swap</a>
                   </Link>
-                  <ul className='dropdown-menu'>
-                    <li className='nav-item'>
-                      <Link href='/faq' activeClassName='active'>
-                        <a className='nav-link'>
-                          <i className='bx bx-info-circle'></i>
-                          FAQ
-                        </a>
-                      </Link>
-                    </li>
-                    <li className='nav-item'>
-                      <Link href='/guides' activeClassName='active'>
-                        <a className='nav-link'>
-                          <i className='bx bx-book'></i>
-                          Guides
-                        </a>
-                      </Link>
-                    </li>
-                    <li className='nav-item'>
-                      <Link href='/wallet' activeClassName='active'>
-                        <a className='nav-link'>
-                          <i className='bx bx-wallet'></i>
-                          Wallets
-                        </a>
-                      </Link>
-                    </li>
-                    <li className='nav-item'>
-                      <Link href='/about' activeClassName='active'>
-                        <a className='nav-link'>
-                          <i className='bx bx-group'></i>
-                          About Us
-                        </a>
-                      </Link>
-                    </li>
-                  </ul>
                 </li>
+              
+                
               </ul>
               <div className='others-option'>
                 <div className='d-flex align-items-center'>

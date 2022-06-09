@@ -7,12 +7,16 @@ const Banner = () => {
             <div className='col-xl-5 col-lg-6 col-md-12 p-0'>
               <div className='banner-wrapper-content'>
                 <span className='sub-title'>
-                  Doodle workshop subtitle
+                  How to buy crew
                 </span>
                 <h1>A Trusted and Secure Cryptocurrency Staking for Work scheduling</h1>
-                <p>
+                <h2>
                   This is the workshop anyone can connect and stake for their favorite works. 
-                </p>
+                  You can purchase CREW tokens over here.
+                  <p>
+                  After a month's public sale, we will get JUNO-CREW pool for swap and lp staking.
+                  </p>
+                </h2>
               </div>
             </div>
             <div className='col-xl-7 col-lg-6 col-md-12 p-0'>
