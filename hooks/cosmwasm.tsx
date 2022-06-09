@@ -65,7 +65,7 @@ export const defaultFee = {
   gas: "400000",
 }
 
-export const CW20_DECIMAL = 1000
+export const CW20_DECIMAL = 1000000
 
 
 export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
