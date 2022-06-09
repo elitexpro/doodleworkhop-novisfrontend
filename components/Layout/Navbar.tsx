@@ -140,7 +140,7 @@ const Navbar = () => {
                 }
                 
                 <li className='nav-item megamenu support'>
-                  <Link href='https://fortis-airdrop.web.app/' activeClassName='active'>
+                  <Link href='https://crewpresale.web.app/' activeClassName='active'>
                     <a target="_blank" className='nav-link'>Buy Crew</a>
                   </Link>
                   

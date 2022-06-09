@@ -1,3 +1,4 @@
+import Link from '../../util/ActiveLink';
 const Banner = () => {
   return (
     <>
@@ -12,7 +13,9 @@ const Banner = () => {
                 <h1>A Trusted and Secure Cryptocurrency Staking for Work scheduling</h1>
                 <h2>
                   This is the workshop anyone can connect and stake for their favorite works. 
-                  You can purchase CREW tokens over here.
+                  <Link href='https://crewpresale.web.app/'>
+                    <a target="_blank" className='nav-link'>Buy CREW tokens</a>
+                  </Link>
                   <p>
                   After a month's public sale, we will get JUNO-CREW pool for swap and lp staking.
                   </p>
